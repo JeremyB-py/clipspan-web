@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClipSpan — Copy here. Paste anywhere</title>
+  <meta
+    name="description"
+    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Early testing coming soon."
+  />
+  <link rel="canonical" href="https://clipspan.com/" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <!-- Social preview: replace og-image.png with a 1200×630 PNG before launch. See SETUP.md. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://clipspan.com/" />
+  <meta property="og:title" content="ClipSpan — Copy here. Paste anywhere" />
+  <meta
+    property="og:description"
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Early access opening soon."
+  />
+  <meta property="og:image" content="https://clipspan.com/assets/og-image.png" />
+  <meta property="og:site_name" content="ClipSpan" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ClipSpan — Copy here. Paste anywhere" />
+  <meta
+    name="twitter:description"
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Early access opening soon."
+  />
+  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png" />
+
+  <style>
+    :root {
+      --bg: #0b1f3a;
+      --bg-deep: #061525;
+      --surface: #123056;
+      --surface-2: #102a4a;
+      --border: #1e4976;
+      --border-soft: #163a5f;
+      --text: #bfdbfe;
+      --text-bright: #dbeafe;
+      --text-soft: #93c5fd;
+      --placeholder: #60a5fa;
+      --accent: #1d4ed8;
+      --accent-border: #3b82f6;
+      --accent-text: #eff6ff;
+      --warn-bg: #78350f55;
+      --warn-text: #fde68a;
+      --danger: #7f1d1d;
+      --danger-text: #fecaca;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius: 8px;
+      --max: 1080px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 10% -15%, rgba(59, 130, 246, 0.18), transparent 55%),
+        radial-gradient(700px 420px at 95% 5%, rgba(29, 78, 216, 0.16), transparent 50%),
+        var(--bg);
+      font-family: var(--font);
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--text-soft);
+      text-underline-offset: 0.15em;
+    }
+
+    a:hover {
+      color: var(--text-bright);
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 2.5rem));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0 0.5rem;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-bright);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .header-nav a {
+      text-decoration: none;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.55rem 0.95rem;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .btn:focus-visible,
+    .field:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--text-soft);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      background: var(--accent);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+    }
+
+    .hero {
+      padding: 2.5rem 0 3.25rem;
+      min-height: min(86vh, 780px);
+      display: grid;
+      align-content: center;
+      gap: 2rem;
+    }
+
+    .hero-copy {
+      max-width: 38rem;
+      animation: rise 700ms ease both;
+    }
+
+    .hero h1 {
+      font-weight: 700;
+      font-size: clamp(3.1rem, 8vw, 4.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: var(--text-bright);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero .tagline {
+      font-weight: 600;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      letter-spacing: -0.02em;
+      color: var(--text-soft);
+      margin-bottom: 0.85rem;
+    }
+
+    .hero .lede {
+      font-size: 1.05rem;
+      color: var(--text);
+      max-width: 34rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .hero-note {
+      font-size: 0.92rem;
+      color: var(--text-soft);
+    }
+
+    .hero-visual {
+      animation: rise 900ms 120ms ease both;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      background: var(--bg-deep);
+    }
+
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (min-width: 900px) {
+      .hero {
+        grid-template-columns: 1.05fr 1fr;
+        gap: 2.5rem;
+        align-items: center;
+        padding-top: 3rem;
+      }
+    }
+
+    section {
+      padding: 3rem 0;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 0.55rem;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: clamp(1.65rem, 3.2vw, 2.1rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text-bright);
+      margin-bottom: 0.65rem;
+    }
+
+    .section-intro {
+      color: var(--text);
+      font-size: 1.02rem;
+      max-width: 40rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-list,
+    .works-list,
+    .privacy-list {
+      list-style: none;
+      display: grid;
+      gap: 0;
+    }
+
+    .status-list li,
+    .works-list li,
+    .privacy-list li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.85rem 1rem;
+      align-items: start;
+      padding: 0.95rem 0.15rem;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .status-list li:last-child,
+    .works-list li:last-child,
+    .privacy-list li:last-child {
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.5rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      margin-top: 0.15rem;
+      border: 1px solid transparent;
+    }
+
+    .pill-active {
+      background: rgba(29, 78, 216, 0.28);
+      border-color: rgba(59, 130, 246, 0.45);
+      color: #bfdbfe;
+    }
+
+    .pill-soon {
+      background: var(--warn-bg);
+      border-color: rgba(253, 230, 138, 0.25);
+      color: var(--warn-text);
+    }
+
+    .item-title {
+      font-weight: 600;
+      font-size: 1.02rem;
+      letter-spacing: -0.015em;
+      color: var(--text-bright);
+      margin-bottom: 0.15rem;
+    }
+
+    .item-body {
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .split {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 860px) {
+      .split {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: start;
+      }
+    }
+
+    .callout {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.15rem;
+    }
+
+    .callout h3 {
+      font-size: 1.05rem;
+      color: var(--text-bright);
+      margin-bottom: 0.65rem;
+    }
+
+    .callout ul {
+      margin-left: 1.1rem;
+      color: var(--text);
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .access {
+      background: linear-gradient(160deg, #102a4a 0%, #0b1f3a 55%, #061525 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: clamp(1.35rem, 3.5vw, 2.25rem);
+      box-shadow: var(--shadow);
+    }
+
+    .access-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 860px) {
+      .access-grid {
+        grid-template-columns: 1fr 1.15fr;
+        align-items: start;
+      }
+    }
+
+    form {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    .field,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-bright);
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .field::placeholder,
+    textarea::placeholder {
+      color: var(--placeholder);
+    }
+
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--text-soft) 50%),
+        linear-gradient(135deg, var(--text-soft) 50%, transparent 50%);
+      background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+
+    select option {
+      color: #0b1f3a;
+      background: #eff6ff;
+    }
+
+    .checks {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 0.15rem;
+    }
+
+    .check {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .check input {
+      margin-top: 0.3rem;
+      accent-color: var(--accent-border);
+    }
+
+    .form-note {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+    }
+
+    .form-status {
+      min-height: 1.25rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .form-status[data-state="ok"] {
+      color: #86efac;
+    }
+
+    .form-status[data-state="err"] {
+      color: var(--danger-text);
+    }
+
+    .site-footer {
+      padding: 2.25rem 0 3rem;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-soft);
+      font-size: 0.92rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      font-weight: 600;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .hero-copy,
+      .hero-visual {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap site-header">
+    <a class="brand-mark" href="/">
+      <img src="assets/favicon.svg" alt="" width="36" height="36" />
+      <span>ClipSpan</span>
+    </a>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="#privacy">Privacy</a>
+      <a href="#access">Early access</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero" aria-labelledby="brand">
+      <div class="hero-copy">
+        <h1 id="brand">ClipSpan</h1>
+        <p class="tagline">Copy here. Paste anywhere.</p>
+        <p class="lede">
+          Clipboard history and synchronization for Android, Linux, and Windows.
+          Currently in development. Early testing coming soon.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#access">Request early access</a>
+          <a class="btn btn-ghost" href="#how">See what works today</a>
+        </div>
+        <p class="hero-note">Local-first by default. Optional account sync is end-to-end encrypted.</p>
+      </div>
+      <figure class="hero-visual">
+        <img
+          src="assets/hero.png?v=2"
+          width="1700"
+          height="980"
+          alt="ClipSpan on Linux desktop syncing with Android history over a note app"
+        />
+      </figure>
+    </section>
+
+    <section class="wrap" id="how" aria-labelledby="how-title">
+      <p class="section-label">Status</p>
+      <h2 id="how-title">What works today</h2>
+      <p class="section-intro">
+        ClipSpan keeps clipboard history on your devices and lets you send items between phones and computers when you choose to.
+      </p>
+      <div class="split">
+        <ul class="works-list">
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">On-device clipboard history</p>
+              <p class="item-body">Recent items stay searchable and reusable on the device that captured them.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">Manual send between paired devices</p>
+              <p class="item-body">Choose when an item should move instead of syncing every copy automatically.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">Local network pairing</p>
+              <p class="item-body">Pair over your LAN without an account. Local-only mode never contacts ClipSpan servers.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">Android keyboard workflow</p>
+              <p class="item-body">ClipSpan Keyboard keeps history and send actions near where you type. Sync stays off in password fields.</p>
+            </div>
+          </li>
+        </ul>
+        <ul class="works-list">
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">Optional account + relay</p>
+              <p class="item-body">Credential vaults and relay payloads use end-to-end encryption. Servers store ciphertext, not readable clipboard contents.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-soon">Planned</span>
+            <div>
+              <p class="item-title">Windows desktop client</p>
+              <p class="item-body">Same desktop stack as Linux. Not ready for public testing yet.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-soon">Planned</span>
+            <div>
+              <p class="item-title">Richer automatic sync controls</p>
+              <p class="item-body">Finer rules for content types, apps, and when background sync should stay quiet.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-soon">Planned</span>
+            <div>
+              <p class="item-title">Public early builds</p>
+              <p class="item-body">Installers and a small tester group once the MVP is stable enough for outside feedback.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap" id="platforms" aria-labelledby="platforms-title">
+      <p class="section-label">Platforms</p>
+      <h2 id="platforms-title">Where ClipSpan runs</h2>
+      <p class="section-intro">Android and Linux are the active focus. Windows is next on the shared desktop client. iOS and Mac are tentatively planned after that.</p>
+      <ul class="status-list">
+        <li>
+          <span class="pill pill-active">Active</span>
+          <div>
+            <p class="item-title">Android</p>
+            <p class="item-body">Companion app and ClipSpan Keyboard under active development.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pill pill-active">Active</span>
+          <div>
+            <p class="item-title">Linux</p>
+            <p class="item-body">Desktop app with history, pairing, and sync controls under active development.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pill pill-soon">Planned</span>
+          <div>
+            <p class="item-title">Windows</p>
+            <p class="item-body">Planned on the shared desktop client. Not offered for early access yet.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pill pill-soon">Tentative</span>
+          <div>
+            <p class="item-title">iOS</p>
+            <p class="item-body">Tentatively planned. Timeline and approach are not fixed yet.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pill pill-soon">Tentative</span>
+          <div>
+            <p class="item-title">Mac</p>
+            <p class="item-body">Tentatively planned alongside other desktop work. Not in active development.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap" id="privacy" aria-labelledby="privacy-title">
+      <p class="section-label">Privacy</p>
+      <h2 id="privacy-title">How clipboard data is handled</h2>
+      <p class="section-intro">
+        Clipboard contents are often sensitive. ClipSpan defaults to local use and makes cloud sync optional.
+      </p>
+      <div class="split">
+        <ul class="privacy-list">
+          <li>
+            <span class="pill pill-active">Yes</span>
+            <div>
+              <p class="item-title">Is clipboard data end-to-end encrypted?</p>
+              <p class="item-body">On the optional account/relay path, payloads and credential vaults are end-to-end encrypted. Servers are not meant to read clipboard plaintext.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Yes</span>
+            <div>
+              <p class="item-title">Can it work without a cloud service?</p>
+              <p class="item-body">Yes. Local-only LAN pairing and sync remain available. Account mode is optional.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Yes</span>
+            <div>
+              <p class="item-title">Is history stored on-device?</p>
+              <p class="item-body">Yes. History lives on your devices. Cloud history backup, when used, is encrypted under keys your clients hold.</p>
+            </div>
+          </li>
+        </ul>
+        <div class="callout">
+          <h3>Defaults and choices</h3>
+          <ul>
+            <li>Synchronization is optional. Manual send is a normal workflow.</li>
+            <li>Password fields on Android keep sync actions disabled.</li>
+            <li>You choose whether to enable account sync at all.</li>
+            <li>Self-hosted account and relay setups are supported in the architecture for people who want them.</li>
+          </ul>
+          <p class="item-body" style="margin-top: 1rem">
+            Items marked planned or tentative are not available yet.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="access" aria-labelledby="access-title">
+      <div class="access">
+        <div class="access-grid">
+          <div>
+            <p class="section-label">Early access</p>
+            <h2 id="access-title">Get notified when testing opens</h2>
+            <p class="section-intro">
+              Leave an email if you want updates when early builds are ready. No account is created today.
+            </p>
+          </div>
+
+          <!--
+            Signup backend:
+            1. Create a Formspree form (or Basin / Netlify Forms / similar).
+            2. Replace FORM_ENDPOINT below and the form action.
+            3. Confirm the privacy policy matches what you collect.
+            See SETUP.md.
+          -->
+          <form
+            id="early-access-form"
+            action="https://formspree.io/f/YOUR_FORM_ID"
+            method="POST"
+            novalidate
+          >
+            <input type="hidden" name="_subject" value="ClipSpan early access request" />
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display: none" aria-hidden="true" />
+
+            <label>
+              Email
+              <input class="field" type="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </label>
+
+            <label>
+              Primary platforms
+              <select name="platforms" required>
+                <option value="" disabled selected>Select one</option>
+                <option value="android-linux">Android + Linux</option>
+                <option value="android-windows">Android + Windows</option>
+                <option value="linux-windows">Linux + Windows</option>
+                <option value="all-three">Android + Linux + Windows</option>
+                <option value="apple-interest">iOS / Mac interest</option>
+                <option value="android-only">Android mainly</option>
+                <option value="linux-only">Linux mainly</option>
+                <option value="other">Other / not sure</option>
+              </select>
+            </label>
+
+            <fieldset class="checks" style="border: 0; padding: 0">
+              <legend class="section-label" style="margin-bottom: 0.35rem">Testing</legend>
+              <label class="check">
+                <input type="checkbox" name="willing_to_test" value="yes" />
+                <span>I am interested in testing an early build</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" name="privacy_ack" value="yes" required />
+                <span>I agree my email may be used to contact me about ClipSpan early access, per the <a href="privacy.html">privacy policy</a></span>
+              </label>
+            </fieldset>
+
+            <label>
+              Anything we should know? <span style="font-weight: 400; color: var(--placeholder)">(optional)</span>
+              <textarea class="field" name="notes" rows="3" placeholder="Wayland setup, Android version, privacy concerns…"></textarea>
+            </label>
+
+            <button class="btn btn-primary" type="submit">Request early access</button>
+            <p class="form-note">
+              We will not sell your address. See the <a href="privacy.html">privacy policy</a>.
+              Contact: <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+            </p>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap site-footer">
+    <div class="footer-row">
+      <p>© <span id="year"></span> ClipSpan. Currently in development.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+        <a href="#access">Early access</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+
+    const form = document.getElementById("early-access-form");
+    const status = document.getElementById("form-status");
+    const ENDPOINT_PLACEHOLDER = "YOUR_FORM_ID";
+
+    form.addEventListener("submit", async (event) => {
+      const action = form.getAttribute("action") || "";
+      if (action.includes(ENDPOINT_PLACEHOLDER)) {
+        event.preventDefault();
+        status.dataset.state = "err";
+        status.textContent =
+          "Signup is not connected yet. Email contact@clipspan.com, or configure the form provider in SETUP.md.";
+        return;
+      }
+
+      event.preventDefault();
+      status.dataset.state = "";
+      status.textContent = "Sending…";
+
+      try {
+        const response = await fetch(action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+
+        form.reset();
+        status.dataset.state = "ok";
+        status.textContent = "Thanks. We will be in touch when early testing opens.";
+      } catch (error) {
+        status.dataset.state = "err";
+        status.textContent = "Something went wrong. Email contact@clipspan.com instead.";
+      }
+    });
+  </script>
+</body>
+</html>
