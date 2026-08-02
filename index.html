@@ -814,16 +814,31 @@
     const ENDPOINT_PLACEHOLDER = "YOUR_FORM_ID";
 
     form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
       const action = form.getAttribute("action") || "";
       if (action.includes(ENDPOINT_PLACEHOLDER)) {
-        event.preventDefault();
         status.dataset.state = "err";
         status.textContent =
           "Signup is not connected yet. Email contact@clipspan.com, or configure the form provider in SETUP.md.";
         return;
       }
 
-      event.preventDefault();
+      // Form uses novalidate so fetch can handle UX; enforce required fields here,
+      // including the contact-agreement checkbox (privacy_ack).
+      if (!form.checkValidity()) {
+        status.dataset.state = "err";
+        const privacyAck = form.elements.namedItem("privacy_ack");
+        if (privacyAck instanceof HTMLInputElement && !privacyAck.checked) {
+          status.textContent = "Please agree to be contacted before submitting.";
+          privacyAck.focus();
+        } else {
+          status.textContent = "Please fill in the required fields.";
+        }
+        form.reportValidity();
+        return;
+      }
+
       status.dataset.state = "";
       status.textContent = "Sending…";
 
