@@ -19,6 +19,8 @@
       --text: #bfdbfe;
       --text-bright: #dbeafe;
       --text-soft: #93c5fd;
+      --word-clip: #ffffff;
+      --word-span: #3b9eff;
       --font: "Segoe UI", system-ui, -apple-system, sans-serif;
     }
 
@@ -59,6 +61,14 @@
       height: 32px;
     }
 
+    .word-clip {
+      color: var(--word-clip);
+    }
+
+    .word-span {
+      color: var(--word-span);
+    }
+
     h1 {
       font-size: clamp(2rem, 5vw, 2.6rem);
       letter-spacing: -0.03em;
@@ -91,7 +101,7 @@
   <div class="wrap">
     <a class="brand" href="/">
       <img src="assets/logo-mark.png" alt="" width="32" height="32" />
-      <span>← ClipSpan</span>
+      <span>← <span class="word-clip">Clip</span><span class="word-span">Span</span></span>
     </a>
     <h1>Privacy Policy</h1>
     <p class="meta">Last updated: 15 August 2026 · Applies to clipspan.com and the ClipSpan apps</p>

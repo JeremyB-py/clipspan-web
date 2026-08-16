@@ -47,6 +47,8 @@
       --accent: #1d4ed8;
       --accent-border: #3b82f6;
       --accent-text: #eff6ff;
+      --word-clip: #ffffff;
+      --word-span: #3b9eff;
       --warn-bg: #78350f55;
       --warn-text: #fde68a;
       --danger: #7f1d1d;
@@ -117,6 +119,19 @@
       width: 36px;
       height: 36px;
       flex-shrink: 0;
+    }
+
+    .wordmark {
+      font-weight: inherit;
+      letter-spacing: inherit;
+    }
+
+    .word-clip {
+      color: var(--word-clip);
+    }
+
+    .word-span {
+      color: var(--word-span);
     }
 
     .hero-logo {
@@ -557,7 +572,7 @@
         width="36"
         height="36"
       />
-      <span>ClipSpan</span>
+      <span class="wordmark"><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
     </a>
     <nav class="header-nav" aria-label="Primary">
       <a href="#privacy">Privacy</a>
@@ -576,7 +591,7 @@
           height="96"
           alt=""
         />
-        <h1 id="brand">ClipSpan</h1>
+        <h1 id="brand" class="wordmark"><span class="word-clip">Clip</span><span class="word-span">Span</span></h1>
         <p class="tagline">Copy here. Paste anywhere.</p>
         <p class="lede">
           Clipboard history and synchronization for Android, Linux, and Windows.
@@ -844,7 +859,7 @@
           width="28"
           height="28"
         />
-        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+        <span>© <span id="year"></span> <span class="wordmark"><span class="word-clip">Clip</span><span class="word-span">Span</span></span>. Private testing coming soon.</span>
       </p>
       <div class="footer-links">
         <a href="privacy.html">Privacy</a>
