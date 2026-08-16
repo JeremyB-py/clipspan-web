@@ -6,28 +6,31 @@
   <title>ClipSpan - Copy here. Paste anywhere</title>
   <meta
     name="description"
-    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Early testing coming soon."
+    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Private testing is next."
   />
   <link rel="canonical" href="https://clipspan.com/" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="assets/favicon-64.png" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <!-- Social preview: replace og-image.png with a 1200×630 PNG before launch. See SETUP.md. -->
+  <!-- Social preview: assets/og-image.png is the 1200×630 branded lockup. -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://clipspan.com/" />
   <meta property="og:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     property="og:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Early access opening soon."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
   />
-  <meta property="og:image" content="https://clipspan.com/assets/og-image.png" />
+  <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=2" />
   <meta property="og:site_name" content="ClipSpan" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     name="twitter:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Early access opening soon."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
   />
-  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png" />
+  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=2" />
 
   <style>
     :root {
@@ -113,6 +116,15 @@
     .brand-mark img {
       width: 36px;
       height: 36px;
+      flex-shrink: 0;
+    }
+
+    .hero-logo {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 10px 28px rgba(59, 130, 246, 0.35));
     }
 
     .header-nav {
@@ -489,6 +501,18 @@
       align-items: center;
     }
 
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
     .footer-links {
       display: flex;
       flex-wrap: wrap;
@@ -526,7 +550,13 @@
 <body>
   <header class="wrap site-header">
     <a class="brand-mark" href="/">
-      <img src="assets/favicon.svg" alt="" width="36" height="36" />
+      <img
+        src="assets/logo-mark.png"
+        srcset="assets/logo-mark.png 1x, assets/logo-mark-256.png 2x"
+        alt=""
+        width="36"
+        height="36"
+      />
       <span>ClipSpan</span>
     </a>
     <nav class="header-nav" aria-label="Primary">
@@ -538,11 +568,19 @@
   <main>
     <section class="wrap hero" aria-labelledby="brand">
       <div class="hero-copy">
+        <img
+          class="hero-logo"
+          src="assets/logo-hero.png"
+          srcset="assets/logo-hero.png 1x, assets/logo-hero-512.png 2x"
+          width="96"
+          height="96"
+          alt=""
+        />
         <h1 id="brand">ClipSpan</h1>
         <p class="tagline">Copy here. Paste anywhere.</p>
         <p class="lede">
           Clipboard history and synchronization for Android, Linux, and Windows.
-          Currently in development. Early testing coming soon.
+          Private testing is next, with a public tester group to follow.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#access">Request early access</a>
@@ -572,28 +610,28 @@
             <span class="pill pill-active">Works</span>
             <div>
               <p class="item-title">On-device clipboard history</p>
-              <p class="item-body">Recent items stay searchable and reusable on the device that captured them.</p>
+              <p class="item-body">Recent clips stay searchable on the device that captured them. Removed items can be restored from Recently removed.</p>
             </div>
           </li>
           <li>
             <span class="pill pill-active">Works</span>
             <div>
-              <p class="item-title">Manual send between paired devices</p>
-              <p class="item-body">Choose when an item should move instead of syncing every copy automatically.</p>
+              <p class="item-title">Send Clip between paired devices</p>
+              <p class="item-body">Choose when an item should move instead of syncing every copy automatically. Share sheet and selected text use the same Send Clip action.</p>
             </div>
           </li>
           <li>
             <span class="pill pill-active">Works</span>
             <div>
               <p class="item-title">Local network pairing</p>
-              <p class="item-body">Pair over your LAN without an account. Local-only mode never contacts ClipSpan servers.</p>
+              <p class="item-body">Pair over your LAN with a QR code, without an account. Local-only mode never contacts ClipSpan servers.</p>
             </div>
           </li>
           <li>
             <span class="pill pill-active">Works</span>
             <div>
-              <p class="item-title">Android keyboard workflow</p>
-              <p class="item-body">ClipSpan Keyboard keeps history and send actions near where you type. Sync stays off in password fields.</p>
+              <p class="item-title">One Android app, including the keyboard</p>
+              <p class="item-body">History, pairing, and ClipSpan Keyboard ship in a single install. Enable the keyboard in Android settings to paste into any app. Sync stays off in password fields.</p>
             </div>
           </li>
         </ul>
@@ -601,29 +639,29 @@
           <li>
             <span class="pill pill-active">Works</span>
             <div>
-              <p class="item-title">Optional account + relay</p>
-              <p class="item-body">Credential vaults and relay payloads use end-to-end encryption. Servers store ciphertext, not readable clipboard contents.</p>
+              <p class="item-title">Images and other multimedia</p>
+              <p class="item-body">History can hold text and images, not only snippets. Automatic sync still respects your size and sensitive-content settings.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Works</span>
+            <div>
+              <p class="item-title">Optional account, backup, and relay</p>
+              <p class="item-body">Sign in for encrypted history backup and relay when you are off the LAN. Servers store ciphertext, not readable clipboard contents.</p>
             </div>
           </li>
           <li>
             <span class="pill pill-testing">Early<br />testing</span>
             <div>
               <p class="item-title">Windows desktop client</p>
-              <p class="item-body">Works on the shared desktop stack with Linux. Currently in early testing, though less thoroughly validated than Android and Linux.</p>
+              <p class="item-body">Shares the Linux desktop app, including first-run setup and automatic updates. Functional today, but not tested as thoroughly as Android and Linux.</p>
             </div>
           </li>
           <li>
-            <span class="pill pill-soon">Planned</span>
+            <span class="pill pill-testing">Opening<br />soon</span>
             <div>
-              <p class="item-title">Richer automatic sync controls</p>
-              <p class="item-body">Finer rules for content types, apps, and when background sync should stay quiet.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pill pill-soon">Planned</span>
-            <div>
-              <p class="item-title">Public early builds</p>
-              <p class="item-body">Installers and a small tester group once the MVP is stable enough for outside feedback.</p>
+              <p class="item-title">Private and public testing</p>
+              <p class="item-body">A small private tester group first, then public early builds. Request access below if you want a spot.</p>
             </div>
           </li>
         </ul>
@@ -639,21 +677,21 @@
           <span class="pill pill-active">Active</span>
           <div>
             <p class="item-title">Android</p>
-            <p class="item-body">Companion app and ClipSpan Keyboard under active development.</p>
+            <p class="item-body">One app with history, pairing, account tools, and ClipSpan Keyboard. First-run setup walks through enabling the keyboard and pairing.</p>
           </div>
         </li>
         <li>
           <span class="pill pill-active">Active</span>
           <div>
             <p class="item-title">Linux</p>
-            <p class="item-body">Desktop app with history, pairing, and sync controls under active development.</p>
+            <p class="item-body">Desktop app with history, pairing, and sync controls. First-run setup checks clipboard tools; later updates can install from the app.</p>
           </div>
         </li>
         <li>
           <span class="pill pill-testing">Early<br />testing</span>
           <div>
             <p class="item-title">Windows</p>
-            <p class="item-body">Desktop app works on the shared client with Linux. Functional today, but not tested as thoroughly as Android and Linux.</p>
+            <p class="item-body">Same desktop app as Linux, including first-run setup and updates. Functional today, but not tested as thoroughly as Android and Linux.</p>
           </div>
         </li>
         <li>
@@ -706,10 +744,12 @@
         <div class="callout">
           <h3>Defaults and choices</h3>
           <ul>
-            <li>Synchronization is optional. Manual send is a normal workflow.</li>
+            <li>Synchronization is optional. Send Clip is a normal workflow.</li>
             <li>Password fields on Android keep sync actions disabled.</li>
-            <li>You choose whether to enable account sync at all.</li>
-            <li>Self-hosted account and relay setups are supported in the architecture for people who want them.</li>
+            <li>ClipSpan Keyboard can see text in the focused field, like any Android keyboard. Keystrokes stay on the device unless you copy or send a clip.</li>
+            <li>You choose whether to enable account sync at all. Encrypted history backup is optional.</li>
+            <li>Diagnostics and bug reports omit clipboard contents, tokens, and pairing secrets.</li>
+            <li>Self-hosted account and relay setups are supported for people who want them.</li>
           </ul>
           <p class="item-body" style="margin-top: 1rem">
             Items marked planned or tentative are not available yet.
@@ -723,9 +763,9 @@
         <div class="access-grid">
           <div>
             <p class="section-label">Early access</p>
-            <h2 id="access-title">Get notified when testing opens</h2>
+            <h2 id="access-title">Get notified when tester builds are ready</h2>
             <p class="section-intro">
-              Leave an email if you want updates when early builds are ready. No account is created today.
+              Private testing is next, then a small public tester group. Leave an email if you want a spot. No account is created today.
             </p>
           </div>
 
@@ -796,7 +836,16 @@
 
   <footer class="wrap site-footer">
     <div class="footer-row">
-      <p>© <span id="year"></span> ClipSpan. Currently in development.</p>
+      <p class="footer-brand">
+        <img
+          src="assets/logo-mark.png"
+          srcset="assets/logo-mark.png 1x, assets/logo-mark-256.png 2x"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+      </p>
       <div class="footer-links">
         <a href="privacy.html">Privacy</a>
         <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
@@ -854,7 +903,7 @@
 
         form.reset();
         status.dataset.state = "ok";
-        status.textContent = "Thanks. We will be in touch when early testing opens.";
+        status.textContent = "Thanks. We will be in touch when tester builds are ready.";
       } catch (error) {
         status.dataset.state = "err";
         status.textContent = "Something went wrong. Email contact@clipspan.com instead.";

@@ -6,10 +6,12 @@
   <title>Privacy Policy - ClipSpan</title>
   <meta
     name="description"
-    content="Privacy policy for clipspan.com, including early-access email collection and product privacy principles."
+    content="Privacy policy for ClipSpan: website signup, local-first clipboard history, optional encrypted account sync, and ClipSpan Keyboard."
   />
   <link rel="canonical" href="https://clipspan.com/privacy.html" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <style>
     :root {
       --bg: #0b1f3a;
@@ -46,8 +48,15 @@
       letter-spacing: -0.02em;
       text-decoration: none;
       color: var(--text-bright);
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
       margin-bottom: 2rem;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
     }
 
     h1 {
@@ -80,14 +89,16 @@
 </head>
 <body>
   <div class="wrap">
-    <a class="brand" href="/">← ClipSpan</a>
+    <a class="brand" href="/">
+      <img src="assets/logo-mark.png" alt="" width="32" height="32" />
+      <span>← ClipSpan</span>
+    </a>
     <h1>Privacy Policy</h1>
-    <p class="meta">Last updated: 2 August 2026 · Applies to clipspan.com</p>
+    <p class="meta">Last updated: 15 August 2026 · Applies to clipspan.com and the ClipSpan apps</p>
 
     <p>
-      ClipSpan is a clipboard history and synchronization product currently in development.
-      This page covers the public website and early-access signup. Product privacy for the apps
-      will be expanded as public builds ship.
+      ClipSpan is a clipboard history and synchronization product for Android, Linux, and Windows.
+      This page covers the public website, early-access signup, and the apps that testers will install.
     </p>
 
     <h2>What this site collects</h2>
@@ -127,20 +138,50 @@
     </p>
 
     <h2>Product data principles</h2>
-    <p>For the ClipSpan apps themselves:</p>
+    <p>
+      On Android, ClipSpan is one app: the companion UI and ClipSpan Keyboard install together.
+      Local-only remains the default. An account is optional.
+    </p>
     <ul>
-      <li>Local-only mode can run without contacting ClipSpan account or relay servers.</li>
-      <li>Optional account/relay sync is designed so servers store ciphertext, not clipboard plaintext.</li>
-      <li>Clipboard history is stored on your devices. Encrypted cloud backup is optional.</li>
+      <li>Clipboard history lives on each device. Pairing on your LAN sends clips between devices you accept.</li>
+      <li>If you sign in, the account server stores your email, device names and platforms, and encrypted vault or relay payloads. Servers do not receive clipboard plaintext.</li>
+      <li>Encrypted history backup is optional. Vault contents are encrypted on the device before upload.</li>
+      <li>ClipSpan does not sell clipboard contents, keystrokes, or account data. There is no advertising SDK in the apps.</li>
+    </ul>
+
+    <h2>ClipSpan Keyboard</h2>
+    <p>
+      Android shows a system warning when you enable a keyboard because an input method can see
+      text in the focused field. That is how any third-party keyboard works.
+    </p>
+    <p>
+      ClipSpan Keyboard uses that access to type, to offer history paste, and to record clips you
+      copy or send. It does not send what you type to ClipSpan servers. Keystrokes stay on the
+      device unless you copy them or send a clip, and then sync that clip to a paired device or
+      an encrypted vault you chose to use. You can turn the keyboard off in Android Settings at any time.
+    </p>
+
+    <h2>Clipboard, pairing, and diagnostics</h2>
+    <ul>
+      <li>History, pins, hidden items, and Recently removed are stored on the device.</li>
+      <li>LAN sync uses a pairing secret you scan or enter. Do not share pairing QR codes or tokens.</li>
+      <li>Automatic sync can include text and images you copy, subject to your size and sensitive-content settings.</li>
+      <li>Diagnostics and bug reports omit clipboard contents, tokens, pairing secrets, and passwords.</li>
     </ul>
     <p class="muted">
-      More detailed in-app disclosures will ship with public builds and may be linked from this page later.
+      Self-hosted account and relay operators can see ciphertext and routing metadata on disk.
+      They cannot read vault or relay contents without your password, recovery key, or device keys.
     </p>
 
     <h2>Contact and deletion</h2>
     <p>
       Email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a> to ask questions,
       request removal from the early-access list, or correct your address.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      ClipSpan is not directed at children under 13. Do not create an account for a child under 13.
     </p>
 
     <h2>Changes</h2>
