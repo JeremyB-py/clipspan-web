@@ -136,9 +136,12 @@
 
     .hero-intro {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: center;
+      justify-content: space-between;
       gap: 1.25rem 2rem;
+      width: 100%;
+      max-width: 56rem;
       animation: rise 700ms ease both;
     }
 
@@ -264,6 +267,7 @@
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       background: var(--bg-deep);
+      width: 100%;
       max-width: 56rem;
     }
 
@@ -565,6 +569,33 @@
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero-intro {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .hero-logo {
+        order: -1;
+        width: clamp(120px, 36vw, 168px);
+        margin: 0 auto 0.35rem;
+      }
+
+      .hero-copy {
+        flex: none;
+        max-width: none;
+        width: 100%;
+      }
+
+      .hero h1,
+      .hero .tagline {
+        text-align: center;
       }
     }
 
