@@ -22,7 +22,7 @@
     property="og:description"
     content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
   />
-  <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=2" />
+  <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=3" />
   <meta property="og:site_name" content="ClipSpan" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ClipSpan - Copy here. Paste anywhere" />
@@ -30,7 +30,7 @@
     name="twitter:description"
     content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
   />
-  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=2" />
+  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=3" />
 
   <style>
     :root {
@@ -134,23 +134,21 @@
       color: var(--word-span);
     }
 
-    .hero-title {
+    .hero-intro {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 0.85rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .hero-title h1 {
-      margin-bottom: 0;
+      gap: 1.25rem 2rem;
+      animation: rise 700ms ease both;
     }
 
     .hero-logo {
       display: block;
-      width: clamp(72px, 12vw, 104px);
+      width: clamp(148px, 26vw, 228px);
       height: auto;
-      flex-shrink: 0;
-      filter: drop-shadow(0 10px 28px rgba(59, 130, 246, 0.35));
+      flex: 0 0 auto;
+      margin-left: auto;
+      filter: drop-shadow(0 12px 32px rgba(59, 130, 246, 0.4));
     }
 
     .header-nav {
@@ -218,8 +216,8 @@
     }
 
     .hero-copy {
+      flex: 1 1 18rem;
       max-width: 38rem;
-      animation: rise 700ms ease both;
     }
 
     .hero h1 {
@@ -575,7 +573,7 @@
         scroll-behavior: auto;
       }
 
-      .hero-copy,
+      .hero-intro,
       .hero-visual {
         animation: none !important;
       }
@@ -602,28 +600,28 @@
 
   <main>
     <section class="wrap hero" aria-labelledby="brand">
-      <div class="hero-copy">
-        <div class="hero-title">
+      <div class="hero-intro">
+        <div class="hero-copy">
           <h1 id="brand" class="wordmark"><span class="word-clip">Clip</span><span class="word-span">Span</span></h1>
-          <img
-            class="hero-logo"
-            src="assets/logo-hero.png"
-            srcset="assets/logo-hero.png 1x, assets/logo-hero-512.png 2x"
-            width="104"
-            height="104"
-            alt=""
-          />
+          <p class="tagline">Copy here. Paste anywhere.</p>
+          <p class="lede">
+            Clipboard history and synchronization for Android, Linux, and Windows.
+            Private testing is next, with a public tester group to follow.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#access">Request early access</a>
+            <a class="btn btn-ghost" href="#how">See what works today</a>
+          </div>
+          <p class="hero-note">Local-first by default. Optional account sync is end-to-end encrypted.</p>
         </div>
-        <p class="tagline">Copy here. Paste anywhere.</p>
-        <p class="lede">
-          Clipboard history and synchronization for Android, Linux, and Windows.
-          Private testing is next, with a public tester group to follow.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#access">Request early access</a>
-          <a class="btn btn-ghost" href="#how">See what works today</a>
-        </div>
-        <p class="hero-note">Local-first by default. Optional account sync is end-to-end encrypted.</p>
+        <img
+          class="hero-logo"
+          src="assets/logo-hero.png"
+          srcset="assets/logo-hero.png 1x, assets/logo-hero-512.png 2x"
+          width="228"
+          height="228"
+          alt=""
+        />
       </div>
       <figure class="hero-visual">
         <img
@@ -802,8 +800,8 @@
             <img
               class="access-wordmark"
               src="assets/logo-wordmark.png"
-              width="480"
-              height="429"
+              width="640"
+              height="619"
               alt="ClipSpan"
             />
             <p class="section-label">Early access</p>
