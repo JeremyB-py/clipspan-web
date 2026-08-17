@@ -49,6 +49,9 @@
       --accent-text: #eff6ff;
       --word-clip: #ffffff;
       --word-span: #3b9eff;
+      --orbit: #eb8023;
+      --orbit-hover: #f08c32;
+      --orbit-text: #061525;
       --warn-bg: #78350f55;
       --warn-text: #fde68a;
       --danger: #7f1d1d;
@@ -199,15 +202,16 @@
       color: #fff;
     }
 
-    .btn-ghost {
-      background: var(--surface);
-      color: var(--text);
+    .btn-orbit {
+      background: var(--orbit);
+      border-color: #f0a04a;
+      color: var(--orbit-text);
     }
 
-    .btn-ghost:hover {
-      background: var(--accent);
-      border-color: var(--accent-border);
-      color: var(--accent-text);
+    .btn-orbit:hover {
+      background: var(--orbit-hover);
+      border-color: #ffb341;
+      color: var(--orbit-text);
     }
 
     .hero {
@@ -244,20 +248,29 @@
       font-size: 1.05rem;
       color: var(--text);
       max-width: 34rem;
-      margin-bottom: 1.4rem;
+      margin: 0 auto 1.4rem;
+      text-align: center;
     }
 
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.65rem;
+      justify-content: center;
+      gap: 0.55rem;
       margin-bottom: 0.85rem;
+    }
+
+    .hero-actions .btn {
+      font-size: 0.88rem;
+      padding: 0.48rem 0.8rem;
+      white-space: nowrap;
     }
 
     .hero-note {
       font-size: 0.92rem;
       color: var(--text-soft);
       margin-bottom: 0.25rem;
+      text-align: center;
     }
 
     .hero-visual {
@@ -622,7 +635,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#access">Request early access</a>
-            <a class="btn btn-ghost" href="#how">See what works today</a>
+            <a class="btn btn-orbit" href="#how">See what works today</a>
           </div>
           <p class="hero-note">Local-first by default. Optional account sync is end-to-end encrypted.</p>
         </div>
@@ -790,9 +803,6 @@
             <li>Diagnostics and bug reports omit clipboard contents, tokens, and pairing secrets.</li>
             <li>Self-hosted account and relay setups are supported for people who want them.</li>
           </ul>
-          <p class="item-body" style="margin-top: 1rem">
-            Items marked planned or tentative are not available yet.
-          </p>
         </div>
       </div>
     </section>
