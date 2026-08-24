@@ -726,6 +726,28 @@ td {
   white-space: pre-wrap;
 }
 
+.cmd {
+  margin: 0.85rem 0 1rem;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-bright);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.callout .cmd:last-child,
+.page .cmd:last-child {
+  margin-bottom: 0;
+}
+
+.page code,
+.callout code {
+  font-size: 0.92em;
+}
+
 @keyframes rise {
   from {
     opacity: 0;

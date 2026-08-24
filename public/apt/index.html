@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linux apt - ClipSpan</title>
+  <meta
+    name="description"
+    content="Private ClipSpan APT repository for Debian and Ubuntu testers."
+  />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/assets/favicon.ico?v=4" sizes="any" />
+  <link rel="icon" href="/assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=4" />
+  <link rel="stylesheet" href="/assets/site.css?v=2" />
+</head>
+<body>
+  <header class="wrap site-header">
+    <a class="brand-mark" href="/">
+      <img
+        src="/assets/logo-mark.png?v=4"
+        srcset="/assets/logo-mark.png?v=4 1x, /assets/logo-mark-256.png?v=4 2x"
+        alt=""
+        width="36"
+        height="36"
+      />
+      <span><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
+    </a>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="/downloads">Downloads</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="wrap page">
+    <p class="section-label">Testers</p>
+    <h1>Linux apt</h1>
+    <p class="lede">
+      Debian and Ubuntu (amd64). This repository uses the same tester password
+      as downloads.
+    </p>
+    <div class="callout">
+      <h2>Install</h2>
+      <p>
+        Username is <code>clipspan</code>. Replace
+        <code>YOUR_PASSWORD</code> with the tester password:
+      </p>
+      <pre class="cmd">curl -fsSL -u "clipspan:YOUR_PASSWORD" https://clipspan.com/apt/install.sh | sudo bash</pre>
+      <p>
+        The script asks for the password again so <code>apt</code> can keep
+        using this repo. Later updates:
+        <code>sudo apt update && sudo apt install clipspan</code>
+      </p>
+      <p>Uninstall: <code>sudo apt remove clipspan</code></p>
+    </div>
+    <p>
+      Android, Windows, and AppImage builds are on
+      <a href="/downloads">tester downloads</a>.
+    </p>
+  </main>
+
+  <footer class="wrap site-footer">
+    <div class="footer-row">
+      <p class="footer-brand">
+        <img
+          src="/assets/logo-mark.png?v=4"
+          srcset="/assets/logo-mark.png?v=4 1x, /assets/logo-mark-256.png?v=4 2x"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+      </p>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy</a>
+        <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+  </script>
+</body>
+</html>

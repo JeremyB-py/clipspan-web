@@ -117,6 +117,52 @@ async function handleDownload(request, env) {
   return new Response(upstream.body, { status: 200, headers });
 }
 
+function wantsHtml(request) {
+  if (request.headers.get("Sec-Fetch-Mode") === "navigate") {
+    return true;
+  }
+  const accept = request.headers.get("Accept") || "";
+  return accept.includes("text/html") && !accept.trim().startsWith("*/*");
+}
+
+function aptUnauthorized(request) {
+  if (request.method === "GET" && wantsHtml(request)) {
+    return Response.redirect(new URL("/downloads", request.url), 302);
+  }
+  return new Response("Tester password required.\n", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="ClipSpan testers"',
+      "Cache-Control": "no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}
+
+async function handleApt(request, env) {
+  if (!String(env.DOWNLOADS_PASSWORD || "").trim()) {
+    return new Response("Downloads are not configured yet.\n", {
+      status: 503,
+      headers: {
+        "Cache-Control": "no-store",
+        "Content-Type": "text/plain; charset=utf-8",
+      },
+    });
+  }
+  if (!(await isAuthorized(request, env))) {
+    return aptUnauthorized(request);
+  }
+  const upstream = await env.ASSETS.fetch(request);
+  const headers = new Headers(upstream.headers);
+  headers.set("Cache-Control", "private, no-store");
+  headers.set("X-Robots-Tag", "noindex, nofollow");
+  return new Response(upstream.body, {
+    status: upstream.status,
+    statusText: upstream.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -137,6 +183,10 @@ export default {
         return json({ error: "Sign in with the tester password." }, 401);
       }
       return handleDownload(request, env);
+    }
+
+    if (url.pathname === "/apt" || url.pathname.startsWith("/apt/")) {
+      return handleApt(request, env);
     }
 
     return json({ error: "Not found." }, 404);

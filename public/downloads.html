@@ -13,7 +13,7 @@
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=1" />
+  <link rel="stylesheet" href="assets/site.css?v=2" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -43,15 +43,6 @@
       These installers are for invited testers. They can change without notice
       and are not signed for public distribution yet.
     </p>
-    <div class="callout">
-      <h2>Linux apt</h2>
-      <p>
-        Debian and Ubuntu testers will later install from
-        <code>clipspan.com/apt</code> or <code>apt.clipspan.com</code>.
-        Until that repo is live, use the <code>.deb</code> or AppImage below.
-      </p>
-    </div>
-
     <section class="gate visible" id="gate" aria-labelledby="gate-title">
       <p class="section-label">Access</p>
       <h2 id="gate-title">Tester password</h2>
@@ -69,6 +60,19 @@
     </section>
 
     <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+      <div class="callout" id="apt">
+        <h2>Linux apt</h2>
+        <p>
+          Debian and Ubuntu (amd64). The repo is the same tester password,
+          sent as HTTP Basic (username <code>clipspan</code>):
+        </p>
+        <pre class="cmd">curl -fsSL -u "clipspan:YOUR_PASSWORD" https://clipspan.com/apt/install.sh | sudo bash</pre>
+        <p>
+          The script asks for the password again so <code>apt</code> can keep
+          using the repo. Later updates:
+          <code>sudo apt update && sudo apt install clipspan</code>
+        </p>
+      </div>
       <p class="section-label">Latest release</p>
       <div class="release-meta">
         <h2 id="catalog-title">Loading…</h2>

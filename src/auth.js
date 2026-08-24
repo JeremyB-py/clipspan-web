@@ -94,12 +94,35 @@ export function readCookie(request, name) {
   return "";
 }
 
+export function readBasicPassword(request) {
+  const header = request.headers.get("Authorization") || "";
+  const match = /^Basic\s+(\S+)/i.exec(header.trim());
+  if (!match) {
+    return "";
+  }
+  let decoded = "";
+  try {
+    decoded = atob(match[1]);
+  } catch {
+    return "";
+  }
+  const colon = decoded.indexOf(":");
+  if (colon < 0) {
+    return "";
+  }
+  return decoded.slice(colon + 1);
+}
+
 export async function isAuthorized(request, env) {
   const secret = String(env.DOWNLOADS_PASSWORD || "").trim();
   if (!secret) {
     return false;
   }
-  return sessionValid(secret, readCookie(request, COOKIE_NAME));
+  if (await sessionValid(secret, readCookie(request, COOKIE_NAME))) {
+    return true;
+  }
+  const basic = readBasicPassword(request);
+  return Boolean(basic) && hashesEqual(basic, secret);
 }
 
 export function sessionCookie(value, requestUrl) {
