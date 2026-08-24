@@ -12,7 +12,7 @@ function safeFilename(name) {
 }
 
 async function handleAuth(request, env) {
-  const expected = env.DOWNLOADS_PASSWORD || "";
+  const expected = String(env.DOWNLOADS_PASSWORD || "").trim();
   if (!expected) {
     return json({ error: "Downloads are not configured yet." }, 503);
   }
@@ -20,7 +20,7 @@ async function handleAuth(request, env) {
   let password = "";
   try {
     const body = await request.json();
-    password = typeof body.password === "string" ? body.password : "";
+    password = typeof body.password === "string" ? body.password.trim() : "";
   } catch {
     return json({ error: "Send the password as JSON." }, 400);
   }

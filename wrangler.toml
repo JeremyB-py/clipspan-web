@@ -1,11 +1,15 @@
-# Workers Builds runs `npx wrangler deploy`. This is a Worker with static assets,
-# not a classic Pages project.
+# Workers Builds runs `npx wrangler deploy`.
+# Static files live in public/ so `wrangler dev` does not watch `.wrangler/`
+# (that loop happens if assets.directory is the repo root).
 name = "clipspan-web"
 compatibility_date = "2024-11-12"
 main = "src/worker.js"
 
 [assets]
-directory = "."
+directory = "./public"
 html_handling = "auto-trailing-slash"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
+
+[secrets]
+required = ["DOWNLOADS_PASSWORD", "GITHUB_TOKEN"]

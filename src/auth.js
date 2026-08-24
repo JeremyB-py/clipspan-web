@@ -95,7 +95,7 @@ export function readCookie(request, name) {
 }
 
 export async function isAuthorized(request, env) {
-  const secret = env.DOWNLOADS_PASSWORD || "";
+  const secret = String(env.DOWNLOADS_PASSWORD || "").trim();
   if (!secret) {
     return false;
   }
