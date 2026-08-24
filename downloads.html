@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tester downloads - ClipSpan</title>
+  <meta
+    name="description"
+    content="Private ClipSpan tester builds for Android, Linux, and Windows."
+  />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
+  <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
+  <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
+  <style>
+    :root {
+      --bg: #0b1f3a;
+      --bg-deep: #061525;
+      --surface: #123056;
+      --surface-2: #102a4a;
+      --border: #1e4976;
+      --border-soft: #163a5f;
+      --text: #bfdbfe;
+      --text-bright: #dbeafe;
+      --text-soft: #93c5fd;
+      --placeholder: #60a5fa;
+      --accent: #1d4ed8;
+      --accent-border: #3b82f6;
+      --accent-text: #eff6ff;
+      --word-clip: #ffffff;
+      --word-span: #3b9eff;
+      --orbit: #eb8023;
+      --orbit-hover: #f08c32;
+      --orbit-text: #061525;
+      --warn-bg: #78350f55;
+      --warn-text: #fde68a;
+      --danger-text: #fecaca;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius: 8px;
+      --max: 1080px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      color-scheme: dark;
+    }
+
+    body {
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 10% -15%, rgba(59, 130, 246, 0.18), transparent 55%),
+        radial-gradient(700px 420px at 95% 5%, rgba(29, 78, 216, 0.16), transparent 50%),
+        var(--bg);
+      font-family: var(--font);
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--text-soft);
+      text-underline-offset: 0.15em;
+    }
+
+    a:hover {
+      color: var(--text-bright);
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 2.5rem));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0 0.5rem;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-bright);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark img {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .word-clip {
+      color: var(--word-clip);
+    }
+
+    .word-span {
+      color: var(--word-span);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .header-nav a {
+      text-decoration: none;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.55rem 0.95rem;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+    }
+
+    .btn:focus-visible,
+    .field:focus-visible {
+      outline: 2px solid var(--text-soft);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    .btn-orbit {
+      background: var(--orbit);
+      border-color: #f0a04a;
+      color: var(--orbit-text);
+    }
+
+    .btn-orbit:hover {
+      background: var(--orbit-hover);
+      border-color: #ffb341;
+      color: var(--orbit-text);
+    }
+
+    .page {
+      padding: 2rem 0 3.25rem;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 0.55rem;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text-bright);
+      margin-bottom: 0.65rem;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: var(--text-bright);
+      margin-bottom: 0.45rem;
+    }
+
+    .lede {
+      font-size: 1.05rem;
+      max-width: 40rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .banner {
+      background: var(--warn-bg);
+      border: 1px solid rgba(253, 230, 138, 0.25);
+      color: var(--warn-text);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      max-width: 46rem;
+    }
+
+    .callout {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.15rem;
+      margin-bottom: 1.75rem;
+      max-width: 46rem;
+    }
+
+    .gate,
+    .catalog {
+      max-width: 46rem;
+    }
+
+    .gate {
+      background: linear-gradient(160deg, #102a4a 0%, #0b1f3a 55%, #061525 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: clamp(1.35rem, 3.5vw, 2rem);
+      box-shadow: var(--shadow);
+    }
+
+    form {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+
+    .field {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-bright);
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .field::placeholder {
+      color: var(--placeholder);
+    }
+
+    .form-status {
+      min-height: 1.25rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .form-status[data-state="ok"] {
+      color: #86efac;
+    }
+
+    .form-status[data-state="err"] {
+      color: var(--danger-text);
+    }
+
+    .release-meta {
+      margin-bottom: 1.25rem;
+    }
+
+    .release-meta p {
+      color: var(--text-soft);
+      font-size: 0.95rem;
+    }
+
+    .cards {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 720px) {
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.1rem;
+      display: grid;
+      gap: 0.55rem;
+      align-content: start;
+    }
+
+    .pill {
+      justify-self: start;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      background: rgba(29, 78, 216, 0.28);
+      color: #bfdbfe;
+    }
+
+    .card .item-title {
+      font-weight: 600;
+      font-size: 1.02rem;
+      letter-spacing: -0.015em;
+      color: var(--text-bright);
+    }
+
+    .card .item-body {
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .card .btn {
+      justify-self: start;
+      margin-top: 0.25rem;
+    }
+
+    .empty {
+      display: none;
+    }
+
+    .empty.visible,
+    .gate.visible,
+    .catalog.visible {
+      display: block;
+    }
+
+    .notes {
+      margin-top: 1.5rem;
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      white-space: pre-wrap;
+    }
+
+    .site-footer {
+      padding: 2.25rem 0 3rem;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-soft);
+      font-size: 0.92rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      font-weight: 600;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap site-header">
+    <a class="brand-mark" href="/">
+      <img
+        src="assets/logo-mark.png?v=4"
+        srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+        alt=""
+        width="36"
+        height="36"
+      />
+      <span><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
+    </a>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="privacy.html">Privacy</a>
+      <a href="/#access">Early access</a>
+    </nav>
+  </header>
+
+  <main class="wrap page">
+    <p class="section-label">Testers</p>
+    <h1>Downloads</h1>
+    <p class="lede">
+      Private builds from the latest ClipSpan release. This is not a store listing.
+    </p>
+    <p class="banner">
+      These installers are for invited testers. They can change without notice
+      and are not signed for public distribution yet.
+    </p>
+    <div class="callout">
+      <h2>Linux apt</h2>
+      <p>
+        Debian and Ubuntu testers will later install from
+        <code>clipspan.com/apt</code> or <code>apt.clipspan.com</code>.
+        Until that repo is live, use the <code>.deb</code> or AppImage below.
+      </p>
+    </div>
+
+    <section class="gate visible" id="gate" aria-labelledby="gate-title">
+      <p class="section-label">Access</p>
+      <h2 id="gate-title">Tester password</h2>
+      <p class="lede" style="margin-bottom: 1rem">
+        Enter the shared password you were given. The download links stay behind this check.
+      </p>
+      <form id="gate-form">
+        <label>
+          Password
+          <input class="field" type="password" name="password" required autocomplete="current-password" />
+        </label>
+        <button class="btn btn-primary" type="submit">Unlock downloads</button>
+        <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="catalog" id="catalog" aria-labelledby="catalog-title">
+      <p class="section-label">Latest release</p>
+      <div class="release-meta">
+        <h2 id="catalog-title">Loading…</h2>
+        <p id="catalog-date"></p>
+      </div>
+      <div class="cards" id="cards"></div>
+      <p class="empty" id="empty">This release does not have tester installers yet.</p>
+      <pre class="notes" id="notes" hidden></pre>
+    </section>
+  </main>
+
+  <footer class="wrap site-footer">
+    <div class="footer-row">
+      <p class="footer-brand">
+        <img
+          src="assets/logo-mark.png?v=4"
+          srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+      </p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+        <a href="/#access">Early access</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+
+    const gate = document.getElementById("gate");
+    const catalog = document.getElementById("catalog");
+    const form = document.getElementById("gate-form");
+    const status = document.getElementById("gate-status");
+    const cards = document.getElementById("cards");
+    const empty = document.getElementById("empty");
+    const notes = document.getElementById("notes");
+    const catalogTitle = document.getElementById("catalog-title");
+    const catalogDate = document.getElementById("catalog-date");
+
+    function formatSize(bytes) {
+      if (!Number.isFinite(bytes) || bytes <= 0) {
+        return "";
+      }
+      if (bytes < 1024 * 1024) {
+        return `${Math.round(bytes / 1024)} KB`;
+      }
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function formatDate(value) {
+      if (!value) {
+        return "";
+      }
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return "";
+      }
+      return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    }
+
+    function setGateMessage(state, text) {
+      status.dataset.state = state;
+      status.textContent = text;
+    }
+
+    function showGate() {
+      gate.classList.add("visible");
+      catalog.classList.remove("visible");
+    }
+
+    function showCatalog() {
+      gate.classList.remove("visible");
+      catalog.classList.add("visible");
+    }
+
+    function renderRelease(release) {
+      catalogTitle.textContent = release.name || release.tag || "Latest release";
+      const published = formatDate(release.publishedAt);
+      catalogDate.textContent = [release.tag, published].filter(Boolean).join(" · ");
+
+      cards.replaceChildren();
+      const assets = Array.isArray(release.assets) ? release.assets : [];
+      empty.classList.toggle("visible", assets.length === 0);
+
+      for (const asset of assets) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = asset.label;
+
+        const title = document.createElement("p");
+        title.className = "item-title";
+        title.textContent = asset.name;
+
+        const body = document.createElement("p");
+        body.className = "item-body";
+        body.textContent = formatSize(asset.size) || "Installer";
+
+        const link = document.createElement("a");
+        link.className = "btn btn-orbit";
+        link.href = `/api/download?id=${encodeURIComponent(asset.id)}`;
+        link.textContent = "Download";
+
+        card.append(pill, title, body, link);
+        cards.append(card);
+      }
+
+      if (release.notes) {
+        notes.hidden = false;
+        notes.textContent = release.notes;
+      } else {
+        notes.hidden = true;
+        notes.textContent = "";
+      }
+    }
+
+    async function loadReleases() {
+      const response = await fetch("/api/releases", { credentials: "same-origin" });
+      if (response.status === 401) {
+        showGate();
+        return false;
+      }
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || "Could not load releases.");
+      }
+      renderRelease(await response.json());
+      showCatalog();
+      return true;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const password = new FormData(form).get("password");
+      setGateMessage("", "Checking…");
+      try {
+        const response = await fetch("/api/auth", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ password }),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          setGateMessage("err", payload.error || "That password is not correct.");
+          return;
+        }
+        form.reset();
+        setGateMessage("ok", "Unlocked.");
+        await loadReleases();
+      } catch {
+        setGateMessage("err", "Something went wrong. Try again.");
+      }
+    });
+
+    loadReleases().catch((error) => {
+      showGate();
+      setGateMessage("err", error.message || "Could not load releases.");
+    });
+  </script>
+</body>
+</html>

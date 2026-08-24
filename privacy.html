@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Privacy Policy - ClipSpan</title>
+  <title>Privacy policy - ClipSpan</title>
   <meta
     name="description"
     content="Privacy policy for ClipSpan: website signup, local-first clipboard history, optional encrypted account sync, and ClipSpan Keyboard."
@@ -11,54 +11,85 @@
   <link rel="canonical" href="https://clipspan.com/privacy.html" />
   <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
+  <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
   <style>
     :root {
       --bg: #0b1f3a;
+      --bg-deep: #061525;
+      --surface: #123056;
+      --surface-2: #102a4a;
       --border: #1e4976;
+      --border-soft: #163a5f;
       --text: #bfdbfe;
       --text-bright: #dbeafe;
       --text-soft: #93c5fd;
+      --accent: #1d4ed8;
+      --accent-border: #3b82f6;
       --word-clip: #ffffff;
       --word-span: #3b9eff;
       --font: "Segoe UI", system-ui, -apple-system, sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { color-scheme: dark; }
+    html {
+      color-scheme: dark;
+    }
 
     body {
       color: var(--text);
-      background: var(--bg);
+      background:
+        radial-gradient(900px 500px at 10% -15%, rgba(59, 130, 246, 0.18), transparent 55%),
+        radial-gradient(700px 420px at 95% 5%, rgba(29, 78, 216, 0.16), transparent 50%),
+        var(--bg);
       font-family: var(--font);
       line-height: 1.6;
-      padding: 2rem 1.25rem 4rem;
+      min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--text-soft);
+      text-underline-offset: 0.15em;
+    }
+
+    a:hover {
+      color: var(--text-bright);
     }
 
     .wrap {
-      width: min(720px, 100%);
+      width: min(1080px, calc(100% - 2.5rem));
       margin-inline: auto;
     }
 
-    a { color: var(--text-soft); }
-    a:hover { color: var(--text-bright); }
-
-    .brand {
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-      color: var(--text-bright);
-      display: inline-flex;
+    .site-header {
+      display: flex;
       align-items: center;
-      gap: 0.55rem;
-      margin-bottom: 2rem;
+      justify-content: space-between;
+      padding: 1.25rem 0 0.5rem;
     }
 
-    .brand img {
-      width: 32px;
-      height: 32px;
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-bright);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark img {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
     }
 
     .word-clip {
@@ -69,7 +100,24 @@
       color: var(--word-span);
     }
 
+    .header-nav {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .header-nav a {
+      text-decoration: none;
+    }
+
+    .policy {
+      width: min(720px, 100%);
+      padding: 2rem 0 3rem;
+    }
+
     h1 {
+      font-weight: 700;
       font-size: clamp(2rem, 5vw, 2.6rem);
       letter-spacing: -0.03em;
       line-height: 1.1;
@@ -91,24 +139,119 @@
       margin: 1.75rem 0 0.55rem;
     }
 
-    p, li { margin-bottom: 0.75rem; }
-    ul { margin: 0 0 1rem 1.2rem; }
-    li { margin-bottom: 0.4rem; }
-    .muted { color: var(--text-soft); }
+    p,
+    li {
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      margin: 0 0 1rem 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    .muted {
+      color: var(--text-soft);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0 1.15rem;
+      font-size: 0.92rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--border-soft);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-2);
+      color: var(--text-bright);
+      font-weight: 600;
+    }
+
+    td {
+      background: var(--surface);
+    }
+
+    .site-footer {
+      padding: 2.25rem 0 3rem;
+      border-top: 1px solid var(--border-soft);
+      color: var(--text-soft);
+      font-size: 0.92rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      font-weight: 600;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <a class="brand" href="/">
-      <img src="assets/logo-mark.png?v=4" alt="" width="32" height="32" />
-      <span>← <span class="word-clip">Clip</span><span class="word-span">Span</span></span>
+  <header class="wrap site-header">
+    <a class="brand-mark" href="/">
+      <img
+        src="assets/logo-mark.png?v=4"
+        srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+        alt=""
+        width="36"
+        height="36"
+      />
+      <span><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
     </a>
-    <h1>Privacy Policy</h1>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/#access">Early access</a>
+    </nav>
+  </header>
+
+  <main class="wrap policy">
+    <h1>Privacy policy</h1>
     <p class="meta">Last updated: 15 August 2026 · Applies to clipspan.com and the ClipSpan apps</p>
 
     <p>
-      ClipSpan is a clipboard history and synchronization product for Android, Linux, and Windows.
-      This page covers the public website, early-access signup, and the apps that testers will install.
+      ClipSpan is a clipboard history app for Android, Linux, and Windows. On Android,
+      one install (<code>com.clipspan.app</code>) includes the companion UI and ClipSpan Keyboard.
+      This page covers the public website, early-access signup, and the apps testers install.
+    </p>
+    <p>
+      Questions about the product can also go to
+      <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+      or an issue on
+      <a href="https://github.com/JeremyB-py/clipspan">github.com/JeremyB-py/clipspan</a>.
     </p>
 
     <h2>What this site collects</h2>
@@ -118,11 +261,11 @@
       <li>Platform preferences you select</li>
       <li>Whether you are interested in testing an early build</li>
       <li>Any optional notes you write</li>
-      <li>Basic technical metadata from the form provider (such as submission time)</li>
+      <li>Basic technical metadata from the form provider, such as submission time</li>
     </ul>
     <p>
-      We use this information only to contact you about ClipSpan development, early testing,
-      and related product updates you requested.
+      We use this only to contact you about ClipSpan development, early testing,
+      and related product updates you asked for.
     </p>
 
     <h2>What we do not do with signup data</h2>
@@ -134,28 +277,30 @@
 
     <h2>Form delivery</h2>
     <p>
-      Form submissions are delivered to us by Formspree. Review Formspree's privacy terms for how they handle that data.
+      Form submissions are delivered by Formspree. Review Formspree's privacy terms for how they handle that data.
     </p>
 
     <h2>Analytics</h2>
     <p>
-      If analytics or server logs are enabled later, they will be used to
-      understand aggregate traffic (for example, whether a referral source sent visitors).
-      They should not be used to build advertising profiles. This policy will be updated when
-      analytics are added.
+      If analytics or server logs are added later, they will be used to understand aggregate traffic,
+      such as whether a referral source sent visitors. They will not be used to build advertising profiles.
+      This policy will be updated when analytics are added.
     </p>
 
-    <h2>Product data principles</h2>
+    <h2>What ClipSpan does with your data</h2>
     <p>
-      On Android, ClipSpan is one app: the companion UI and ClipSpan Keyboard install together.
-      Local-only remains the default. An account is optional.
+      Clipboard history lives on each device. Pairing on your LAN sends clips between devices you accept.
+      ClipSpan does not require an account.
     </p>
-    <ul>
-      <li>Clipboard history lives on each device. Pairing on your LAN sends clips between devices you accept.</li>
-      <li>If you sign in, the account server stores your email, device names and platforms, and encrypted vault or relay payloads. Servers do not receive clipboard plaintext.</li>
-      <li>Encrypted history backup is optional. Vault contents are encrypted on the device before upload.</li>
-      <li>ClipSpan does not sell clipboard contents, keystrokes, or account data. There is no advertising SDK in the apps.</li>
-    </ul>
+    <p>
+      If you sign in, the account server stores your email, device names and platforms,
+      and encrypted vault or relay payloads. Servers do not receive clipboard plaintext.
+      Vault contents are encrypted on the device before upload.
+    </p>
+    <p>
+      ClipSpan does not sell clipboard contents, keystrokes, or account data.
+      There is no advertising SDK in the apps.
+    </p>
 
     <h2>ClipSpan Keyboard</h2>
     <p>
@@ -166,19 +311,78 @@
       ClipSpan Keyboard uses that access to type, to offer history paste, and to record clips you
       copy or send. It does not send what you type to ClipSpan servers. Keystrokes stay on the
       device unless you copy them or send a clip, and then sync that clip to a paired device or
-      an encrypted vault you chose to use. You can turn the keyboard off in Android Settings at any time.
+      an encrypted vault you chose to use. You can turn the keyboard off in Android Settings →
+      System → Keyboard at any time.
     </p>
 
     <h2>Clipboard, pairing, and diagnostics</h2>
     <ul>
       <li>History, pins, hidden items, and Recently removed are stored on the device.</li>
       <li>LAN sync uses a pairing secret you scan or enter. Do not share pairing QR codes or tokens.</li>
-      <li>Automatic sync can include text and images you copy, subject to your size and sensitive-content settings.</li>
-      <li>Diagnostics and bug reports omit clipboard contents, tokens, pairing secrets, and passwords.</li>
+      <li>Automatic sync can include text and multimedia you copy, subject to your size and sensitive-content settings.</li>
+      <li>
+        Diagnostics and bug reports omit clipboard contents, tokens, pairing secrets, and passwords.
+        Network details such as a LAN address are included only if you opt in.
+      </li>
+    </ul>
+
+    <h2>Optional account and relay</h2>
+    <p>When account mode is on:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>What the server can see</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account email</td>
+          <td>Yes, as your sign-in identity</td>
+        </tr>
+        <tr>
+          <td>Device registry (name, platform, public key, status)</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Vault and relay payloads</td>
+          <td>Encrypted bytes only</td>
+        </tr>
+        <tr>
+          <td>Routing metadata (IDs, expiry, sizes)</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Clipboard plaintext</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Account password, recovery key, device private keys</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Resetting the account password without the old password or recovery key starts a new empty vault.
+    </p>
+
+    <h2>What we do not collect</h2>
+    <ul>
+      <li>Advertising identifiers or analytics SDKs</li>
+      <li>Precise location</li>
+      <li>Contacts, photos, or files except clipboard or share content you send through ClipSpan</li>
+      <li>Keystroke logs uploaded to ClipSpan</li>
     </ul>
     <p class="muted">
-      Self-hosted account and relay operators can see ciphertext and routing metadata on disk.
+      Crash and bug reports you file on GitHub are public. Do not paste secrets into them.
+    </p>
+
+    <h2>Self-hosted account and relay</h2>
+    <p>
+      Optional servers store identity and ciphertext, not readable clips.
+      A self-hosted operator can see email, device metadata, and routing sizes on disk.
       They cannot read vault or relay contents without your password, recovery key, or device keys.
+      With account mode off, clients do not contact the account or relay servers.
     </p>
 
     <h2>Contact and deletion</h2>
@@ -197,6 +401,30 @@
       We may update this policy as the site and product change. The "Last updated" date at the
       top will change when we do.
     </p>
-  </div>
+  </main>
+
+  <footer class="wrap site-footer">
+    <div class="footer-row">
+      <p class="footer-brand">
+        <img
+          src="assets/logo-mark.png?v=4"
+          srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+      </p>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+        <a href="/#access">Early access</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+  </script>
 </body>
 </html>
