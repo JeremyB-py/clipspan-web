@@ -6,7 +6,7 @@
   <title>ClipSpan - Copy here. Paste anywhere</title>
   <meta
     name="description"
-    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Private testing is next."
+    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Private testing is starting."
   />
   <link rel="canonical" href="https://clipspan.com/" />
   <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
@@ -20,7 +20,7 @@
   <meta property="og:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     property="og:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
   />
   <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=4" />
   <meta property="og:site_name" content="ClipSpan" />
@@ -28,10 +28,10 @@
   <meta name="twitter:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     name="twitter:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is next."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
   />
   <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=1" />
+  <link rel="stylesheet" href="assets/site.css?v=4" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -46,7 +46,7 @@
       <span class="wordmark"><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
     </a>
     <nav class="header-nav" aria-label="Primary">
-      <a href="#privacy">Privacy</a>
+      <a href="privacy.html">Privacy</a>
       <a href="/downloads">Downloads</a>
       <a href="#access">Early access</a>
     </nav>
@@ -68,13 +68,13 @@
           <p class="tagline">Copy here. Paste anywhere.</p>
           <p class="lede">
             Clipboard history and sync for Android, Linux, and Windows.
-            Private testing is next, followed by a public tester group.
+            Private testing is starting, followed by a public tester group.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#access">Request early access</a>
-            <a class="btn btn-orbit" href="#how">See what works today</a>
+            <a class="btn btn-orbit" href="#how">Features</a>
           </div>
-          <p class="hero-note">Local-first by default. Optional account sync is end-to-end encrypted.</p>
+          <p class="hero-note">Local QR pairing by default. An account uses ClipSpan Cloud. Self-hosting is still available.</p>
         </div>
       </div>
       <figure class="hero-visual">
@@ -88,69 +88,55 @@
     </section>
 
     <section class="wrap" id="how" aria-labelledby="how-title">
-      <p class="section-label">Status</p>
-      <h2 id="how-title">What works today</h2>
+      <p class="section-label">Features</p>
+      <h2 id="how-title">Features</h2>
       <p class="section-intro">
         ClipSpan keeps clipboard history on your devices and lets you send items between phones and computers when you choose to.
       </p>
       <div class="split">
         <ul class="works-list">
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">History</span>
             <div>
               <p class="item-title">On-device clipboard history</p>
               <p class="item-body">Recent clips stay searchable on the device that captured them. Removed items can be restored from Recently removed.</p>
             </div>
           </li>
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">Send</span>
             <div>
               <p class="item-title">Send Clip between paired devices</p>
               <p class="item-body">Choose when an item should move instead of syncing every copy automatically. Share sheet and selected text use the same Send Clip action.</p>
             </div>
           </li>
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">Pairing</span>
             <div>
               <p class="item-title">Local network pairing</p>
               <p class="item-body">Pair over your LAN with a QR code, without an account. Local-only mode never contacts ClipSpan servers.</p>
             </div>
           </li>
+        </ul>
+        <ul class="works-list">
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">Android</span>
             <div>
               <p class="item-title">One Android app, including the keyboard</p>
               <p class="item-body">History, pairing, and ClipSpan Keyboard ship in a single install. Enable the keyboard in Android settings to paste into any app. Sync stays off in password fields.</p>
             </div>
           </li>
-        </ul>
-        <ul class="works-list">
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">Media</span>
             <div>
               <p class="item-title">Images and other multimedia</p>
               <p class="item-body">History can hold text and images. Files and links are in active testing. Automatic sync still respects your size and sensitive-content settings.</p>
             </div>
           </li>
           <li>
-            <span class="pill pill-active">Works</span>
+            <span class="pill pill-active">Account</span>
             <div>
               <p class="item-title">Optional account, backup, and relay</p>
-              <p class="item-body">Sign in for encrypted history backup and relay when you are off the LAN. Servers store ciphertext, not readable clipboard contents.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pill pill-testing">Early<br />testing</span>
-            <div>
-              <p class="item-title">Windows desktop client</p>
-              <p class="item-body">Shares the Linux desktop app, including first-run setup and automatic updates. Functional today, but not tested as thoroughly as Android and Linux.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pill pill-testing">Opening<br />soon</span>
-            <div>
-              <p class="item-title">Private and public testing</p>
-              <p class="item-body">A small private tester group first, then public early builds. Request access below if you want a spot.</p>
+              <p class="item-body">Sign in to ClipSpan Cloud for encrypted history backup and text relay when you are off the LAN. Same-account devices on the same Wi-Fi can pair without a QR scan. Self-host with a custom Account API URL.</p>
             </div>
           </li>
         </ul>
@@ -205,6 +191,7 @@
       <h2 id="privacy-title">How clipboard data is handled</h2>
       <p class="section-intro">
         ClipSpan defaults to local use and makes cloud sync optional.
+        See the <a href="privacy.html">privacy policy</a>.
       </p>
       <div class="split">
         <ul class="privacy-list">
@@ -219,7 +206,7 @@
             <span class="pill pill-active">Yes</span>
             <div>
               <p class="item-title">Can it work without a cloud service?</p>
-              <p class="item-body">Yes. Local-only LAN pairing and sync remain available. Account mode is optional.</p>
+              <p class="item-body">Yes. QR pairing on the LAN works with no account. An account uses ClipSpan Cloud. Self-host with a custom Account API URL.</p>
             </div>
           </li>
           <li>
@@ -238,7 +225,9 @@
             <li>ClipSpan Keyboard can see text in the focused field, like any Android keyboard. Keystrokes stay on the device unless you copy or send a clip.</li>
             <li>You choose whether to enable account sync at all. Encrypted history backup is optional.</li>
             <li>Diagnostics and bug reports omit clipboard contents, tokens, and pairing secrets.</li>
-            <li>Self-hosted account and relay setups are supported for people who want them.</li>
+            <li>Creating an account uses ClipSpan Cloud (api.clipspan.com). Relay moves text when you are off the LAN.</li>
+            <li>Self-host with a custom Account API URL.</li>
+            <li>Local QR pairing stays the default if you never sign in.</li>
           </ul>
         </div>
       </div>
@@ -258,7 +247,7 @@
             <p class="section-label">Early access</p>
             <h2 id="access-title">Get notified when tester builds are ready</h2>
             <p class="section-intro">
-              Private testing is next, then a small public tester group. Leave an email if you want a spot. No account is created today.
+              Private testing is starting, then a small public tester group. Leave an email if you want a spot. No account is created today.
             </p>
           </div>
 
@@ -337,7 +326,7 @@
           width="28"
           height="28"
         />
-        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+        <span>© <span id="year"></span> ClipSpan. Private testing is starting.</span>
       </p>
       <div class="footer-links">
         <a href="privacy.html">Privacy</a>

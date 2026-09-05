@@ -13,7 +13,7 @@
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=1" />
+  <link rel="stylesheet" href="assets/site.css?v=4" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -35,7 +35,7 @@
 
   <main class="wrap policy">
     <h1>Privacy policy</h1>
-    <p class="meta">Last updated: 15 August 2026 · Applies to clipspan.com and the ClipSpan apps</p>
+    <p class="meta">Last updated: 5 September 2026 · Applies to clipspan.com and the ClipSpan apps</p>
 
     <p>
       ClipSpan is a clipboard history app for Android, Linux, and Windows. On Android,
@@ -85,10 +85,11 @@
     <h2>What ClipSpan does with your data</h2>
     <p>
       Clipboard history lives on each device. Pairing on your LAN sends clips between devices you accept.
-      ClipSpan does not require an account.
+      ClipSpan does not require an account. Local QR pairing is the default and does not contact ClipSpan Cloud.
     </p>
     <p>
-      If you sign in, the account server stores your email, device names and platforms,
+      If you sign in, the account uses ClipSpan Cloud (api.clipspan.com / relay.clipspan.com).
+      The account server stores your email, device names and platforms,
       and encrypted vault or relay payloads. Servers do not receive clipboard plaintext.
       Vault contents are encrypted on the device before upload.
     </p>
@@ -174,6 +175,7 @@
 
     <h2>Self-hosted account and relay</h2>
     <p>
+      Self-host with a custom Account API URL.
       Optional servers store identity and ciphertext, not readable clips.
       A self-hosted operator can see email, device metadata, and routing sizes on disk.
       They cannot read vault or relay contents without your password, recovery key, or device keys.
@@ -208,7 +210,7 @@
           width="28"
           height="28"
         />
-        <span>© <span id="year"></span> ClipSpan. Private testing coming soon.</span>
+        <span>© <span id="year"></span> ClipSpan. Private testing is starting.</span>
       </p>
       <div class="footer-links">
         <a href="/">Home</a>

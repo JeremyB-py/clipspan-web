@@ -351,6 +351,13 @@ textarea::placeholder {
   text-decoration: none;
 }
 
+#how,
+#platforms,
+#privacy,
+#access {
+  padding-block: 2.5rem;
+}
+
 .hero {
   padding: 2.5rem 0 3.25rem;
   display: grid;
@@ -459,6 +466,17 @@ textarea::placeholder {
   align-items: start;
   padding: 0.95rem 0.15rem;
   border-top: 1px solid var(--border-soft);
+}
+
+.works-list li {
+  grid-template-columns: 6rem 1fr;
+  column-gap: 1.15rem;
+}
+
+.works-list .pill {
+  justify-self: start;
+  text-align: center;
+  min-width: 100%;
 }
 
 .status-list li:last-child,
