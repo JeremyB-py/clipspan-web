@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ClipSpan privacy policy</title><style>body{font-family:sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.45} pre{white-space:pre-wrap}</style></head><body><pre># ClipSpan privacy policy
+
+Last updated: 2026-08-15
+
+ClipSpan is a cross-device clipboard history app. On Android, ClipSpan (`com.clipspan.app`) includes the companion UI and ClipSpan Keyboard in one install. This page is the product privacy policy for store listings and in-app About links. Operator notes for a self-hosted account/relay follow at the end.
+
+Contact: open an issue at [github.com/JeremyB-py/clipspan](https://github.com/JeremyB-py/clipspan).
+
+## What ClipSpan does with your data
+
+**Local by default.** Clipboard history lives on each device. Pairing on your LAN sends clips between devices you accept. ClipSpan does not require an account.
+
+**Optional account.** If you sign in, the account server stores your email, device names/platforms, and encrypted vault/relay payloads. Servers do not receive clipboard plaintext. Vault contents are encrypted on the device before upload.
+
+**No ads or sale of data.** ClipSpan does not sell clipboard contents, keystrokes, or account data. There is no advertising SDK in the apps.
+
+## ClipSpan Keyboard (Android input method)
+
+Android shows a system warning when you enable a keyboard because an input method can see text in the focused field. That is how any third-party keyboard works.
+
+ClipSpan Keyboard uses that access to type, to offer ClipSpan history paste, and to record clips you copy or send. It does **not** send what you type to ClipSpan servers. Keystrokes stay on the device unless you copy them (or send a clip) and then sync that clip to a paired device or an encrypted vault you chose to use.
+
+You can turn the keyboard off in Android Settings → System → Keyboard at any time.
+
+## Clipboard and pairing
+
+- History, pins, and hidden items are stored on the device.
+- LAN sync uses a pairing secret you scan or enter. Do not share pairing QR codes or tokens.
+- Automatic sync can include text and multimedia you copy, subject to your size and sensitive-content settings.
+- Diagnostics and bug reports omit clipboard contents, tokens, pairing secrets, and passwords. Network details (LAN address) are included only if you opt in.
+
+## Optional account and relay
+
+When account mode is on:
+
+| Data | What the server can see |
+|------|-------------------------|
+| Account email | Yes (sign-in identity) |
+| Device registry (name, platform, public key, status) | Yes |
+| Vault and relay payloads | Encrypted bytes only |
+| Routing metadata (IDs, expiry, sizes) | Yes |
+| Clipboard plaintext | No |
+| Account password, recovery key, device private keys | No |
+
+A self-hosted operator can see ciphertext and metadata on disk. They cannot read vault or relay contents without your password, recovery key, or device keys. Resetting the account password without the old password or recovery key starts a new empty vault.
+
+## What we do not collect
+
+- Advertising identifiers or analytics SDKs
+- Precise location
+- Contacts, photos, or files except clipboard/share content you send through ClipSpan
+- Keystroke logs uploaded to ClipSpan
+
+Crash and bug reports you choose to file on GitHub are public. Do not paste secrets into them.
+
+## Children
+
+ClipSpan is not directed at children under 13. Do not create an account for a child under 13.
+
+## Changes
+
+Material changes will be noted in [CHANGELOG.md](CHANGELOG.md) and by updating the date on this page.
+
+## Related
+
+- [security-model.md](security-model.md)
+- [store-setup.md](store-setup.md) (Play Data safety draft)
+- [ADR 0016](adr/0016-phase11-account-relay-security.md)
+- [deployment.md](deployment.md)
+
+---
+
+## Operator notes (self-hosted account + relay)
+
+Clipboard and keyboard data are sensitive. Local-only remains the default. Optional servers store identity and ciphertext, not readable clips.
+
+| Data | Visibility |
+|------|------------|
+| Account email | Yes (identity) |
+| Device registry metadata (name, platform, public encryption key, status) | Yes |
+| Vault ciphertext + key wraps | Opaque bytes only |
+| Relay envelopes / blob ciphertext | Opaque bytes only |
+| Routing metadata (account/device IDs, message IDs, expiry, sizes) | Yes |
+| Plaintext sync tokens | **Never** |
+| Clipboard plaintext | **Never** (E2E model) |
+| Account root key / device private keys | **Never** |
+
+With account mode off (`local_only`), clients do not contact `account-api` or `relay`. LAN pairing and sync behave as in Phases 7–10.
+
+When enabling an account, UI must state that servers store **email + device metadata + encrypted credentials**, not readable clipboard contents. Destructive password reset without password/recovery key creates a **new empty vault**.
+</pre></body></html>

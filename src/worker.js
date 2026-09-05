@@ -139,18 +139,30 @@ function aptUnauthorized(request) {
   });
 }
 
+function aptPathIsPublic(pathname) {
+  return (
+    pathname === "/apt/clipspan.asc" ||
+    pathname === "/apt/clipspan.gpg" ||
+    pathname.startsWith("/apt/dists/") ||
+    pathname.startsWith("/apt/pool/")
+  );
+}
+
 async function handleApt(request, env) {
-  if (!String(env.DOWNLOADS_PASSWORD || "").trim()) {
-    return new Response("Downloads are not configured yet.\n", {
-      status: 503,
-      headers: {
-        "Cache-Control": "no-store",
-        "Content-Type": "text/plain; charset=utf-8",
-      },
-    });
-  }
-  if (!(await isAuthorized(request, env))) {
-    return aptUnauthorized(request);
+  const pathname = new URL(request.url).pathname;
+  if (!aptPathIsPublic(pathname)) {
+    if (!String(env.DOWNLOADS_PASSWORD || "").trim()) {
+      return new Response("Downloads are not configured yet.\n", {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      });
+    }
+    if (!(await isAuthorized(request, env))) {
+      return aptUnauthorized(request);
+    }
   }
   const upstream = await env.ASSETS.fetch(request);
   const headers = new Headers(upstream.headers);

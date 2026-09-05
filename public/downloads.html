@@ -66,10 +66,10 @@
           Debian and Ubuntu (amd64). The repo is the same tester password,
           sent as HTTP Basic (username <code>clipspan</code>):
         </p>
-        <pre class="cmd">curl -fsSL -u "clipspan:YOUR_PASSWORD" https://clipspan.com/apt/install.sh | sudo bash</pre>
+        <pre class="cmd">curl -fsSL -u "clipspan:YOUR_PASSWORD" https://www.clipspan.com/apt/install.sh | sudo bash</pre>
         <p>
-          The script asks for the password again so <code>apt</code> can keep
-          using the repo. Later updates:
+          Use <code>www</code> — a redirect from the apex host drops the
+          password. Later updates:
           <code>sudo apt update && sudo apt install clipspan</code>
         </p>
       </div>
