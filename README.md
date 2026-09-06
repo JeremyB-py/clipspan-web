@@ -5,7 +5,7 @@ Static site for **clipspan.com**, deployed as a Cloudflare Worker with static as
 - Public pages: `public/index.html`, `public/privacy.html`
 - Shared theme: `public/assets/site.css`
 - Tester downloads: `public/downloads.html`, gated by [`src/worker.js`](src/worker.js)
-- Tester APT repo: `public/apt/` (from ClipSpan `dist/apt-site`), at `/apt`, same password (session cookie or HTTP Basic)
+- Tester APT origin: `https://apt.clipspan.com` (this Worker custom domain; `public/apt/` at URL root). `https://www.clipspan.com/apt` is the same tree. ClipSpan `./scripts/publish-apt-repo.sh --push` replaces `public/apt` (do not edit that tree by hand). Attach `apt.clipspan.com` on Worker **clipspan-web** in the Cloudflare dashboard.
 - Setup checklist and Reddit notes: [SETUP.md](SETUP.md)
 
 Preview the static pages:

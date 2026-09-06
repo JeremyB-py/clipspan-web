@@ -125,18 +125,27 @@ function wantsHtml(request) {
   return accept.includes("text/html") && !accept.trim().startsWith("*/*");
 }
 
-function aptUnauthorized(request) {
-  if (request.method === "GET" && wantsHtml(request)) {
-    return Response.redirect(new URL("/downloads", request.url), 302);
+function isAptHost(hostname) {
+  return hostname === "apt.clipspan.com";
+}
+
+function isAptRequest(url) {
+  return isAptHost(url.hostname) || url.pathname === "/apt" || url.pathname.startsWith("/apt/");
+}
+
+function aptAssetPathname(url) {
+  if (isAptHost(url.hostname)) {
+    return url.pathname === "/" ? "/apt/" : `/apt${url.pathname}`;
   }
-  return new Response("Tester password required.\n", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="ClipSpan testers"',
-      "Cache-Control": "no-store",
-      "Content-Type": "text/plain; charset=utf-8",
-    },
-  });
+  return url.pathname;
+}
+
+function aptAssetRequest(request) {
+  const url = new URL(request.url);
+  if (!isAptHost(url.hostname)) {
+    return request;
+  }
+  return new Request(new URL(aptAssetPathname(url) + url.search, url.origin), request);
 }
 
 function aptPathIsPublic(pathname) {
@@ -148,8 +157,26 @@ function aptPathIsPublic(pathname) {
   );
 }
 
+function aptUnauthorized(request) {
+  if (request.method === "GET" && wantsHtml(request)) {
+    const url = new URL(request.url);
+    const downloads = isAptHost(url.hostname)
+      ? "https://www.clipspan.com/downloads"
+      : new URL("/downloads", request.url);
+    return Response.redirect(downloads, 302);
+  }
+  return new Response("Tester password required.\n", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="ClipSpan testers"',
+      "Cache-Control": "no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}
+
 async function handleApt(request, env) {
-  const pathname = new URL(request.url).pathname;
+  const pathname = aptAssetPathname(new URL(request.url));
   if (!aptPathIsPublic(pathname)) {
     if (!String(env.DOWNLOADS_PASSWORD || "").trim()) {
       return new Response("Downloads are not configured yet.\n", {
@@ -164,7 +191,7 @@ async function handleApt(request, env) {
       return aptUnauthorized(request);
     }
   }
-  const upstream = await env.ASSETS.fetch(request);
+  const upstream = await env.ASSETS.fetch(aptAssetRequest(request));
   const headers = new Headers(upstream.headers);
   headers.set("Cache-Control", "private, no-store");
   headers.set("X-Robots-Tag", "noindex, nofollow");
@@ -197,10 +224,12 @@ export default {
       return handleDownload(request, env);
     }
 
-    if (url.pathname === "/apt" || url.pathname.startsWith("/apt/")) {
+    // apt.clipspan.com serves public/apt at the URL root. www /apt is the
+    // same tree. GitHub Pages cannot host this: clipspan is a private repo.
+    if (isAptRequest(url)) {
       return handleApt(request, env);
     }
 
-    return json({ error: "Not found." }, 404);
+    return env.ASSETS.fetch(request);
   },
 };

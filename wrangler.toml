@@ -9,7 +9,8 @@ main = "src/worker.js"
 directory = "./public"
 html_handling = "auto-trailing-slash"
 binding = "ASSETS"
-run_worker_first = ["/api/*", "/apt", "/apt/*"]
+# All hosts, including apt.clipspan.com (public/apt served at URL root).
+run_worker_first = true
 
 [secrets]
 required = ["DOWNLOADS_PASSWORD", "GITHUB_TOKEN"]

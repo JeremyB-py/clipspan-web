@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Install ClipSpan on Debian/Ubuntu (amd64).
-# Testers (use www — curl drops basic auth across the apex→www redirect):
-#   curl -fsSL -u "clipspan:PASSWORD" https://www.clipspan.com/apt/install.sh | sudo bash
+# Testers (apt.clipspan.com, not www.clipspan.com/apt or the apex host):
+#   curl -fsSL -u "clipspan:PASSWORD" https://apt.clipspan.com/install.sh | sudo bash
 # Adds the ClipSpan APT repo. dists/, pool/, and the signing key must be
 # publicly readable. This script does not download from GitHub Releases
 # (the repo is private).
 set -euo pipefail
 
-CLIPSPAN_APT_BASE="${CLIPSPAN_APT_BASE:-https://www.clipspan.com/apt}"
+CLIPSPAN_APT_BASE="${CLIPSPAN_APT_BASE:-https://apt.clipspan.com}"
 KEYRING_PATH="/usr/share/keyrings/clipspan-archive-keyring.gpg"
 LIST_PATH="/etc/apt/sources.list.d/clipspan.list"
 PKG="clipspan"
@@ -15,8 +15,8 @@ PKG="clipspan"
 normalize_apt_base() {
   local base="${1%/}"
   case "$base" in
-    https://clipspan.com/apt|http://clipspan.com/apt)
-      printf '%s\n' "https://www.clipspan.com/apt"
+    https://www.clipspan.com/apt|http://www.clipspan.com/apt|https://clipspan.com/apt|http://clipspan.com/apt)
+      printf '%s\n' "https://apt.clipspan.com"
       ;;
     *)
       printf '%s\n' "$base"
@@ -75,8 +75,8 @@ if [[ "$code" == "200" ]]; then
   install_from_repo
 else
   echo "error: APT metadata at $inrelease_url returned HTTP ${code:-failed}." >&2
-  echo "GitHub Releases are not public (private repo). Use https://www.clipspan.com/apt" >&2
-  echo "(not the apex clipspan.com host — curl drops basic auth on that redirect)." >&2
+  echo "GitHub Releases are not public (private repo). Use https://apt.clipspan.com" >&2
+  echo "(not www.clipspan.com/apt or the apex clipspan.com host)." >&2
   echo "dists/, pool/, and clipspan.asc must be readable without basic auth." >&2
   exit 1
 fi
