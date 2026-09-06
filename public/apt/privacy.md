@@ -1,6 +1,6 @@
 # ClipSpan privacy policy
 
-Last updated: 2026-08-15
+Last updated: 2026-09-05
 
 ClipSpan is a cross-device clipboard history app. On Android, ClipSpan (`com.clipspan.app`) includes the companion UI and ClipSpan Keyboard in one install. This page is the product privacy policy for store listings and in-app About links. Operator notes for a self-hosted account/relay follow at the end.
 
@@ -43,6 +43,20 @@ When account mode is on:
 | Account password, recovery key, device private keys | No |
 
 A self-hosted operator can see ciphertext and metadata on disk. They cannot read vault or relay contents without your password, recovery key, or device keys. Resetting the account password without the old password or recovery key starts a new empty vault.
+
+## Retention and deletion
+
+- Local clipboard history uses the retention settings on each device. Hiding an
+  item is device-specific; Delete creates a sync tombstone for paired devices.
+- The hosted relay defaults to deleting unacknowledged encrypted envelopes and
+  blobs after 72 hours. Self-host operators can configure this window.
+- Account deletion revokes sessions immediately and defaults to a seven-day
+  recovery/anti-reuse period before account metadata, device records, vault
+  ciphertext, and relay state are hard-deleted. Self-host operators can
+  configure the period and must disclose material differences.
+- Encrypted infrastructure backups may outlive live records until the
+  operator's backup-retention window expires. Backups are not used to restore
+  individual deleted accounts.
 
 ## What we do not collect
 
