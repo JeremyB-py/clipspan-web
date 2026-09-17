@@ -2,19 +2,19 @@ Origin: ClipSpan
 Label: ClipSpan
 Suite: stable
 Codename: stable
-Date: Thu, 17 Sep 2026 02:19:52 UTC
+Date: Thu, 17 Sep 2026 03:49:29 UTC
 Architectures: amd64
 Components: main
 Description: ClipSpan desktop
 MD5Sum:
- d3050f4daeea72726c3daaae5268968c 560 main/binary-amd64/Packages
- 821bb0743555ac89c8eb8f4248ba5426 402 main/binary-amd64/Packages.gz
+ 1cd09d865d37d85c2aae73713d281046 562 main/binary-amd64/Packages
+ 23011263ce7f0011a89f5ffffd5b0418 402 main/binary-amd64/Packages.gz
  57d1fb126333ec2f7be7f4a9e1d67310 115 main/binary-amd64/Release
 SHA1:
- 4fd0d82a31e14510e59072eab9b8d2eec173b1a2 560 main/binary-amd64/Packages
- ac2769a674d58d5081b850b031892175238d0fd7 402 main/binary-amd64/Packages.gz
+ 7a61177c75ef76dfc849e449a79d5d2546467379 562 main/binary-amd64/Packages
+ 7eaee4c3c17c2e2e49150cc4a39e6c9f65746df2 402 main/binary-amd64/Packages.gz
  60d68f3d8998c19777b2b4dbffc2a162ed6e4827 115 main/binary-amd64/Release
 SHA256:
- 3311d7c6c6acdce1960e197f393ab5165d41cbebbdc93fd38b343754a0af2bc2 560 main/binary-amd64/Packages
- 4a3a0d2c449ed516fc58019106c1cff1d8dd9b365edc8ae6198cb1ec2c656675 402 main/binary-amd64/Packages.gz
+ 79d047297e34a3e0c967e7270bd59ab8242e928945f41719fbc7e446797c36a4 562 main/binary-amd64/Packages
+ a1b42e9b69ad53e8a6537274a9abde2d0cf19ed29276970640dc5587613c5e5f 402 main/binary-amd64/Packages.gz
  f29191f138652e32910aead7e7b04c252570a11fac279ae48cd72ee148523f9d 115 main/binary-amd64/Release
