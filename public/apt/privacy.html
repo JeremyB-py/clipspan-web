@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ClipSpan privacy policy</title><style>body{font-family:sans-serif;max-width:40rem;margin:2rem auto;padding:0 1rem;line-height:1.45} pre{white-space:pre-wrap}</style></head><body><pre># ClipSpan privacy policy
 
-Last updated: 2026-09-05
+Last updated: 2026-09-09
 
 ClipSpan is a cross-device clipboard history app. On Android, ClipSpan (`com.clipspan.app`) includes the companion UI and ClipSpan Keyboard in one install. This page is the product privacy policy for store listings and in-app About links. Operator notes for a self-hosted account/relay follow at the end.
 
@@ -19,9 +19,11 @@ Contact: open an issue at [github.com/JeremyB-py/clipspan](https://github.com/Je
 
 Android shows a system warning when you enable a keyboard because an input method can see text in the focused field. That is how any third-party keyboard works.
 
-ClipSpan Keyboard uses that access to type, to offer ClipSpan history paste, and to record clips you copy or send. It does **not** send what you type to ClipSpan servers. Keystrokes stay on the device unless you copy them (or send a clip) and then sync that clip to a paired device or an encrypted vault you chose to use.
+ClipSpan Keyboard uses that access to type, to offer ClipSpan history paste, and to record clips you copy or send. It does **not** send what you type to ClipSpan servers as keystrokes. A default-on **Learn corrections** setting may store normalized correction choices on the device (original and replacement words, locale, and a coarse score). Password, incognito, email, URL, and code-like fields are excluded. Android backup and device transfer skip that database. Nothing is uploaded unless you later open **Learned corrections**, preview the exact word list, and confirm a contribution.
 
-You can turn the keyboard off in Android Settings → System → Keyboard at any time.
+A confirmed contribution sends only normalized English words and coarse tap buckets (`1`, `2`, or `3+`) to the account API you see in the preview. ClipSpan does not receive correction pairs, surrounding text, app names, account identifiers, or device identifiers with that payload. The server keeps a pending copy for 30 days so you can delete it from the same screen, then folds it into anonymous review totals. Maintainers inspect those totals before any dictionary change; learned or contributed words are never merged automatically.
+
+You can turn the keyboard off in Android Settings → System → Keyboard at any time. You can turn learning off or clear stored corrections in ClipSpan Keyboard settings.
 
 ## Clipboard and pairing
 
@@ -58,13 +60,18 @@ A self-hosted operator can see ciphertext and metadata on disk. They cannot read
 - Encrypted infrastructure backups may outlive live records until the
   operator&#x27;s backup-retention window expires. Backups are not used to restore
   individual deleted accounts.
+- Anonymous keyboard contributions (if a user previews and confirms one) stay
+  in a pending table for 30 days with a deletion token on that device, then
+  become unlinkable review totals. Operators can delete aggregate words. No IP,
+  account, or device columns are stored on that path.
 
 ## What we do not collect
 
 - Advertising identifiers or analytics SDKs
 - Precise location
 - Contacts, photos, or files except clipboard/share content you send through ClipSpan
-- Keystroke logs uploaded to ClipSpan
+- Keystroke logs uploaded to ClipSpan, except the optional previewed word list
+  described under ClipSpan Keyboard
 
 Crash and bug reports you choose to file on GitHub are public. Do not paste secrets into them.
 
@@ -74,14 +81,14 @@ ClipSpan is not directed at children under 13. Do not create an account for a ch
 
 ## Changes
 
-Material changes will be noted in [CHANGELOG.md](CHANGELOG.md) and by updating the date on this page.
+Material changes will be noted in [CHANGELOG.md](../docs/CHANGELOG.md) and by updating the date on this page.
 
 ## Related
 
-- [security-model.md](security-model.md)
-- [store-setup.md](store-setup.md) (Play Data safety draft)
-- [ADR 0016](adr/0016-phase11-account-relay-security.md)
-- [deployment.md](deployment.md)
+- [security-model.md](../docs/architecture/security-model.md)
+- [store-setup.md](../docs/ops/store-setup.md) (Play Data safety draft)
+- [ADR 0016](../docs/adr/0016-phase11-account-relay-security.md)
+- [deployment.md](../docs/ops/deployment.md)
 
 ---
 
@@ -99,6 +106,7 @@ Clipboard and keyboard data are sensitive. Local-only remains the default. Optio
 | Plaintext sync tokens | **Never** |
 | Clipboard plaintext | **Never** (E2E model) |
 | Account root key / device private keys | **Never** |
+| Anonymous vocabulary contributions | Normalized words + coarse buckets in a 30-day pending table, then unlinkable aggregates. No account, device, or IP columns. |
 
 With account mode off (`local_only`), clients do not contact `account-api` or `relay`. LAN pairing and sync behave as in Phases 7–10.
 

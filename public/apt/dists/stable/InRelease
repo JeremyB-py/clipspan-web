@@ -5,35 +5,35 @@ Origin: ClipSpan
 Label: ClipSpan
 Suite: stable
 Codename: stable
-Date: Sun, 06 Sep 2026 20:28:30 UTC
+Date: Thu, 17 Sep 2026 01:26:52 UTC
 Architectures: amd64
 Components: main
 Description: ClipSpan desktop
 MD5Sum:
- 0d1440f6780bfacee6d1823cf1e7d298 558 main/binary-amd64/Packages
- 6bb55a83b7a19a42f1283548e5b11efe 398 main/binary-amd64/Packages.gz
+ 30efb8bef7d46ad3f883223aa80d213a 560 main/binary-amd64/Packages
+ 9dd513d8388d6ecaa8f4958394e81a38 402 main/binary-amd64/Packages.gz
  57d1fb126333ec2f7be7f4a9e1d67310 115 main/binary-amd64/Release
 SHA1:
- a87b16b6456e5e794c4d6b3d7f3d9c1b98e63aa8 558 main/binary-amd64/Packages
- 5942ca94c9b12732e840758ea6ea40393a2b5f38 398 main/binary-amd64/Packages.gz
+ 49774fe8464f98c8825688e6132f668a7c7270ab 560 main/binary-amd64/Packages
+ c26618f406636c26452d0854438ff3602ba3da99 402 main/binary-amd64/Packages.gz
  60d68f3d8998c19777b2b4dbffc2a162ed6e4827 115 main/binary-amd64/Release
 SHA256:
- 3a4d3d957d84783fb601175f2bc3770bf414ac50966eb01ad7d2e769256c2ec1 558 main/binary-amd64/Packages
- 23ad7b16dffb29a2e9b08b912b6915b6b5b5b818b6ee1d78cf4385377c3f1d32 398 main/binary-amd64/Packages.gz
+ dd0ca714c0bc6172ce0fb9b0895eda4fd7d6e376d41cfba538a776a36796e17a 560 main/binary-amd64/Packages
+ 381da6baf7a31c9e9678eb39b218b1247bcb13ebcd53d43e5162cfa1853e0965 402 main/binary-amd64/Packages.gz
  f29191f138652e32910aead7e7b04c252570a11fac279ae48cd72ee148523f9d 115 main/binary-amd64/Release
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEX0KoR/u0j6KEe/8piMO0jtbr2ZQFAmqdzO4ACgkQiMO0jtbr
-2ZRHLg//e/pS5w4YDyvPGYZHF46jSKndy6mDdU/oAvmY3+p/O+U5dBNTpQJjTbsP
-DCaGWdOVEqV5HbUAmWjKfuDavI+jAjiDvKFZ1OXgrGkBkUz0iBZ/rdeEpIcHoaaQ
-ka7IqV05OwTgFk7L6s7ygOlHgz/MwCbUhHVDObGTJ6ByuVWfWG11kLMCQ0Ml6CDr
-o3AtTTINyR9zqxXdt/vJFdKHJq6cS5S4KJBGSuIABx+/QsDzcvLr8i+boyPlhg6t
-j4DbbeuSB8DxFQMz2z3F20e6zcXnP1bfoMCKa4TpgM1lc2ImyHTHXahTYnFapf+b
-haPO9XQdruinVxFH6qMQcO/keK5gqhmARxY6iYDDpRgpwz2lgFCujQ36CGfdbzTw
-WDKRzHT6C4eOYn+ZGlo8fP3tcoPZe13ycmAKF1zauJufZFDedgKxHSuGAGKtWiO9
-D/jyJxayA9sE1Pm+I/y+eirRhHA7dNc1IMJqSXSTY5U9doKXZHkkqaQ3uF5aCYVp
-yB9Px/8/6u4JmR0BU7hUIMG/As1oraQdDivXVfAgHG1qTaIVABuiGN7ac3gCUjsv
-zQ/sswDBCuZv7dg/H410sMy8IO3hC99zcBtcSZUraEnFHhJ8ewHxJgwea6YPYHcY
-YgoogZL8xoSIbKu6u+bdEv0PUWHRNgQyfogdzKNz/CdVGxF5jFE=
-=flQ2
+iQIzBAEBCgAdFiEEX0KoR/u0j6KEe/8piMO0jtbr2ZQFAmqrQdwACgkQiMO0jtbr
+2ZQZBQ/+Jdvv4MEWUrJD433Pm1g4QGmNlAGRKrHKQxpFU8e5ZULa5S2eEfDjXxlL
+k25+NposAnMEo4C3/Vrox5eJ/VU6zteXYkgjhkCyBny0U/TUB2NHIVZZYDoy9mLf
+tyKGRaN/4Qcu2Ml/MUp70SFbTLA7jJ83r+WTyCBnJiWI0h+igv1ACt7tD744IhuB
+bAted1G1VNy5IBQOwwI9NRtHjkVdpJIeJHvzPUJ5H+VU/as/ce++z8IyTsZ2mUyS
+XD1QHdf8jknWn/F0HvhWXVSqf5LkEZ8RCsHqrFV66m+OHjEXoN1arrYo4nVubyuM
+JSYeGDvht+KE8V0se0Z4xEX6MGmRJvNOUyGEotg+qNKtIZj4T4QBLRp/eZzkqWCW
+E1jDvJm2ejUL5HIorliQ3cj0xrGoITGmxJfwOuBEGiiP615lqeQwNe7hg91B62xK
+vMKh/G14R4sRo9aKK0xWqvc8Q72KvBBJ4SNTs62XrTCURdAPbz+2vaA2B3Rz/8I9
+Rg47+2Rd9UKCOQTMLec99+qVKkxHD2yFGRjySCzEODUexMZKUKk/CfCC/2FOkQXF
+BG3IOQjQEYDHqhYpFYIwMmGRwp4JspCyNHSxXMcXaU7E986uTlphRjvSY/bJselV
+JnkzCFgXPfdNZGe7HheEb4NlXWiM+/mi2OwpKP3Z6lszObvEgI0=
+=0f/C
 -----END PGP SIGNATURE-----
