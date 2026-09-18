@@ -1,16 +1,16 @@
 Package: clipspan
-Version: 0.17.13a
+Version: 0.17.13b
 Architecture: amd64
-Installed-Size: 35332
+Installed-Size: 35353
 Maintainer: ClipSpan
 Depends: libayatana-appindicator3-1, libwebkit2gtk-4.1-0, libgtk-3-0
 Priority: optional
 Section: utils
-Filename: pool/main/c/clipspan/clipspan_0.17.13a_amd64.deb
-Size: 9416264
-SHA256: f3b085eeb55e21ae17283ac157d1a6ab90cc4f29571b207084be3c36150bae72
-SHA1: 311daa72516f8b76f40d4003d0fb2b1bfc938842
-MD5sum: 422c57a26be7e9378aae344c758978d1
+Filename: pool/main/c/clipspan/clipspan_0.17.13b_amd64.deb
+Size: 9409036
+SHA256: e6e2f56b2e89469eac5bbc5a8151ac829130c91997fca1127c5f771188770c40
+SHA1: 2efa0b69bce79f4c4a190cd80d8cf895f491e2ed
+MD5sum: 5e139d0741a71f52f3cb76efafcb2799
 Description: ClipSpan desktop tray app (Tauri + Svelte)
  (none)
 Provides: clip-span
