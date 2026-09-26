@@ -5,6 +5,7 @@ Static site for **clipspan.com**, deployed as a Cloudflare Worker with static as
 - Public pages: `public/index.html`, `public/privacy.html`
 - Shared theme: `public/assets/site.css`
 - Tester downloads: `public/downloads.html`, gated by [`src/worker.js`](src/worker.js)
+- Desktop in-app updater: `GET /updates/latest.json` (latest release manifest, cached 5 minutes) and `GET /updates/v<version>/<file>` (AppImage, NSIS `-setup.exe`, or `.msi` only). Both are public without the tester password, because installed apps cannot sign in, and rate limited per IP (30/min for the manifest, 6/min for files; `[[ratelimits]]` in `wrangler.toml`). Integrity comes from the minisign pubkey compiled into the app, not from this Worker. APKs, `.deb`s, and the `/downloads` listing stay gated.
 - Tester APT origin: `https://apt.clipspan.com` (this Worker custom domain; `public/apt/` at URL root). `https://www.clipspan.com/apt` is the same tree. ClipSpan `./scripts/publish-apt-repo.sh --push` replaces `public/apt` (do not edit that tree by hand). Attach `apt.clipspan.com` on Worker **clipspan-web** in the Cloudflare dashboard.
 - Setup checklist and Reddit notes: [SETUP.md](SETUP.md)
 

@@ -14,3 +14,16 @@ run_worker_first = true
 
 [secrets]
 required = ["DOWNLOADS_PASSWORD", "GITHUB_TOKEN"]
+
+# Per-IP limits on the public /updates/ routes (see src/worker.js). Counters
+# are per Cloudflare location; period must be 10 or 60 seconds. namespace_id
+# is any integer unique within the Cloudflare account.
+[[ratelimits]]
+name = "UPDATES_MANIFEST_LIMITER"
+namespace_id = "1001"
+simple = { limit = 30, period = 60 }
+
+[[ratelimits]]
+name = "UPDATES_FILE_LIMITER"
+namespace_id = "1002"
+simple = { limit = 6, period = 60 }

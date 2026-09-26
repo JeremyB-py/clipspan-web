@@ -94,9 +94,13 @@ async function handleDownload(request, env) {
     return json({ error: "That file is not available." }, 404);
   }
 
+  return streamAsset(env, asset);
+}
+
+async function streamAsset(env, asset) {
   let upstream;
   try {
-    upstream = await githubAsset(env, id);
+    upstream = await githubAsset(env, asset.id);
   } catch {
     return json({ error: "Could not fetch that file." }, 502);
   }
@@ -115,6 +119,88 @@ async function handleDownload(request, env) {
   }
 
   return new Response(upstream.body, { status: 200, headers });
+}
+
+// In-app desktop updater (Tauri). Public on purpose: installed apps cannot
+// sign in, and the app verifies every file against the minisign pubkey it
+// ships with. Only updater bundles are served; APKs, .debs, and the
+// /downloads listing stay behind the tester password.
+const UPDATES_PREFIX = "/updates/";
+const UPDATER_TAG = /^v\d+\.\d+\.\d+[a-z]?$/;
+const UPDATER_FILE = /^[A-Za-z0-9._+-]+(\.AppImage|\.msi|-setup\.exe)$/;
+const MANIFEST_MAX_AGE = 300;
+const RATE_LIMIT_PERIOD = 60;
+
+// Keyed by client IP. Limits live in wrangler.toml: the manifest is loose
+// (apps check on launch), bundles are tight (each one costs a GitHub API call
+// and a large download).
+async function updatesRateLimited(request, limiter) {
+  const key = request.headers.get("CF-Connecting-IP") || "unknown";
+  const { success } = await limiter.limit({ key });
+  return !success;
+}
+
+async function handleUpdateManifest(request, env, ctx) {
+  const cache = caches.default;
+  const cached = await cache.match(request);
+  if (cached) {
+    return cached;
+  }
+
+  let release;
+  try {
+    release = await githubJson(env, `/repos/${repoName(env)}/releases/latest`);
+  } catch {
+    return json({ error: "Could not load the latest release." }, 502);
+  }
+  const asset = (release.assets || []).find((item) => item.name === "latest.json");
+  if (!asset) {
+    return json({ error: "The latest release has no updater manifest." }, 404);
+  }
+
+  let upstream;
+  try {
+    upstream = await githubAsset(env, asset.id);
+  } catch {
+    return json({ error: "Could not fetch the updater manifest." }, 502);
+  }
+  if (!upstream.ok) {
+    return json({ error: "GitHub did not return the updater manifest." }, 502);
+  }
+
+  // Cached so every app launch does not spend GitHub API quota.
+  const response = new Response(await upstream.text(), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": `public, max-age=${MANIFEST_MAX_AGE}`,
+    },
+  });
+  ctx.waitUntil(cache.put(request, response.clone()));
+  return response;
+}
+
+// /updates/<tag>/<file>: latest.json names the tag, so a manifest cached just
+// before a new release still resolves to its own files.
+async function handleUpdateFile(url, env) {
+  const [tag, name, ...rest] = url.pathname.slice(UPDATES_PREFIX.length).split("/");
+  if (rest.length || !UPDATER_TAG.test(tag || "") || !UPDATER_FILE.test(name || "")) {
+    return json({ error: "That file is not available." }, 404);
+  }
+
+  let release;
+  try {
+    release = await githubJson(env, `/repos/${repoName(env)}/releases/tags/${tag}`);
+  } catch (error) {
+    return error.status === 404
+      ? json({ error: "That release does not exist." }, 404)
+      : json({ error: "Could not load that release." }, 502);
+  }
+  const asset = (release.assets || []).find((item) => item.name === name);
+  if (!asset) {
+    return json({ error: "That file is not available." }, 404);
+  }
+  return streamAsset(env, asset);
 }
 
 function wantsHtml(request) {
@@ -203,8 +289,19 @@ async function handleApt(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (url.pathname.startsWith(UPDATES_PREFIX) && request.method === "GET") {
+      const isManifest = url.pathname === `${UPDATES_PREFIX}latest.json`;
+      const limiter = isManifest ? env.UPDATES_MANIFEST_LIMITER : env.UPDATES_FILE_LIMITER;
+      if (await updatesRateLimited(request, limiter)) {
+        return json({ error: "Too many update requests. Try again shortly." }, 429, {
+          "Retry-After": String(RATE_LIMIT_PERIOD),
+        });
+      }
+      return isManifest ? handleUpdateManifest(request, env, ctx) : handleUpdateFile(url, env);
+    }
 
     if (url.pathname === "/api/auth" && request.method === "POST") {
       return handleAuth(request, env);
