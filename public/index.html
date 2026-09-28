@@ -14,7 +14,7 @@
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
 
-  <!-- Social preview: assets/og-image.png is the 1200×630 branded lockup. -->
+  <!-- Social preview: assets/og-image.png is the 1200×630 phone + desktop scene with the logo lockup. -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://clipspan.com/" />
   <meta property="og:title" content="ClipSpan - Copy here. Paste anywhere" />
@@ -22,7 +22,7 @@
     property="og:description"
     content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
   />
-  <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=4" />
+  <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=5" />
   <meta property="og:site_name" content="ClipSpan" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ClipSpan - Copy here. Paste anywhere" />
@@ -30,7 +30,7 @@
     name="twitter:description"
     content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
   />
-  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=4" />
+  <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=5" />
   <link rel="stylesheet" href="assets/site.css?v=5" />
 </head>
 <body>
@@ -100,14 +100,21 @@
         </ul>
       </section>
       <figure class="hero-media">
-        <picture>
-          <img
-            src="assets/hero.png?v=2"
-            width="1700"
-            height="980"
-            alt="ClipSpan on Linux desktop syncing with Android history over a note app"
-          />
-        </picture>
+        <video
+          id="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          width="1600"
+          height="900"
+          poster="assets/demo-loop-poster.jpg?v=2"
+          aria-label="Demo: a photo copied on a Linux desktop appears in ClipSpan Keyboard's history on Android. An address copied on the phone is then pasted on the desktop from the ClipSpan history picker."
+        >
+          <source src="assets/demo-loop.webm?v=2" type="video/webm" />
+          <source src="assets/demo-loop.mp4?v=2" type="video/mp4" />
+        </video>
       </figure>
     </section>
 
@@ -377,6 +384,14 @@
 
   <script>
     document.getElementById("year").textContent = String(new Date().getFullYear());
+
+    // Reduced motion: show the first frame with controls instead of autoplaying the demo loop.
+    const heroVideo = document.getElementById("hero-video");
+    if (heroVideo && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      heroVideo.removeAttribute("autoplay");
+      heroVideo.pause();
+      heroVideo.controls = true;
+    }
 
     const form = document.getElementById("early-access-form");
     const status = document.getElementById("form-status");
