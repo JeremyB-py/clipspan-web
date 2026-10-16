@@ -7,12 +7,13 @@ export function repoName(env) {
   return env.GITHUB_REPO || DEFAULT_REPO;
 }
 
+// `platform` names one file type; public/downloads.html places each by it.
 export function classifyAsset(name) {
   if (SKIP_EXT.test(name) || SKIP_NAME.test(name)) {
     return null;
   }
   if (/\.apk$/i.test(name)) {
-    return { platform: "android", label: "Android APK" };
+    return { platform: "android-apk", label: "Android APK" };
   }
   if (/\.AppImage$/i.test(name)) {
     return { platform: "linux-appimage", label: "Linux AppImage" };
@@ -21,10 +22,10 @@ export function classifyAsset(name) {
     return { platform: "linux-deb", label: "Linux .deb" };
   }
   if (/\.msi$/i.test(name)) {
-    return { platform: "windows", label: "Windows MSI" };
+    return { platform: "windows-msi", label: "Windows MSI" };
   }
   if (/\.exe$/i.test(name)) {
-    return { platform: "windows", label: "Windows installer" };
+    return { platform: "windows-exe", label: "Windows installer" };
   }
   return null;
 }
