@@ -434,15 +434,17 @@
         });
 
         if (!response.ok) {
-          throw new Error("Request failed");
+          const detail = await response.json().catch(() => null);
+          throw new Error(detail?.error || `Request failed (${response.status})`);
         }
 
         form.reset();
         status.dataset.state = "ok";
         status.textContent = "Thanks. We will be in touch when tester builds are ready.";
       } catch (error) {
+        console.error("Early access signup failed:", error);
         status.dataset.state = "err";
-        status.textContent = "Something went wrong. Email contact@clipspan.com instead.";
+        status.textContent = "Something went wrong. Please email contact@clipspan.com instead.";
       }
     });
   </script>

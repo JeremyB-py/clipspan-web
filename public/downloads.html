@@ -40,19 +40,28 @@
       Private builds from the latest ClipSpan release. This is not a store listing.
     </p>
     <p class="banner">
-      These installers are for invited testers. They can change without notice
-      and are not signed for public distribution yet.
+      These installers are for invited testers and can change without notice.
+      Windows installers are code-signed, and Windows shows the publisher as Jeremy Brown.
+      SmartScreen can still warn while the signature builds reputation over the first releases.
     </p>
     <section class="gate visible" id="gate" aria-labelledby="gate-title">
       <p class="section-label">Access</p>
-      <h2 id="gate-title">Tester password</h2>
+      <h2 id="gate-title">Tester code</h2>
       <p class="lede">
-        Enter the shared password you were given. The download links stay behind this check.
+        Enter the tester code you were given. It is yours alone, so please don't share it.
       </p>
       <form id="gate-form">
         <label>
-          Password
-          <input class="field" type="password" name="password" required autocomplete="current-password" />
+          Code
+          <input
+            class="field"
+            type="password"
+            name="code"
+            required
+            autocomplete="current-password"
+            autocapitalize="characters"
+            spellcheck="false"
+          />
         </label>
         <button class="btn btn-primary" type="submit">Unlock downloads</button>
         <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
@@ -63,10 +72,10 @@
       <div class="callout" id="apt">
         <h2>Linux apt</h2>
         <p>
-          Debian and Ubuntu (amd64). The repo is the same tester password,
-          sent as HTTP Basic (username <code>clipspan</code>):
+          Debian and Ubuntu (amd64). The install script needs your tester code,
+          sent as HTTP Basic (username <code>clipspan</code>). Updates through apt don't.
         </p>
-        <pre class="cmd">curl -fsSL -u "clipspan:YOUR_PASSWORD" https://apt.clipspan.com/install.sh | sudo bash</pre>
+        <pre class="cmd">curl -fsSL -u "clipspan:YOUR_CODE" https://apt.clipspan.com/install.sh | sudo bash</pre>
         <p>
           Use <code>apt.clipspan.com</code>, not a path on clipspan.com.
           Later updates:
@@ -217,18 +226,18 @@
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const password = new FormData(form).get("password");
+      const code = new FormData(form).get("code");
       setGateMessage("", "Checking…");
       try {
         const response = await fetch("/api/auth", {
           method: "POST",
           credentials: "same-origin",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ password }),
+          body: JSON.stringify({ code }),
         });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) {
-          setGateMessage("err", payload.error || "That password is not correct.");
+          setGateMessage("err", payload.error || "That code is not correct.");
           return;
         }
         form.reset();

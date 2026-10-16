@@ -1,9 +1,12 @@
 import {
-  hashesEqual,
-  isAuthorized,
+  authenticate,
+  downloadsConfigured,
   json,
+  rateLimited,
+  recordUse,
   sessionCookie,
   signSession,
+  testerForCode,
 } from "./auth.js";
 import { classifyAsset, githubAsset, githubJson, repoName } from "./github.js";
 
@@ -11,26 +14,59 @@ function safeFilename(name) {
   return String(name || "download").replace(/[^A-Za-z0-9._+-]/g, "_");
 }
 
-async function handleAuth(request, env) {
-  const expected = String(env.DOWNLOADS_PASSWORD || "").trim();
-  if (!expected) {
+function trackUse(env, request, ctx, hash) {
+  // Stats only: a failed write must not block the download.
+  ctx.waitUntil(recordUse(env, request, hash).catch(() => {}));
+}
+
+function tooManyAttempts() {
+  return json({ error: "Too many attempts. Try again in a minute." }, 429, {
+    "Retry-After": String(RATE_LIMIT_PERIOD),
+  });
+}
+
+async function handleAuth(request, env, ctx) {
+  if (!downloadsConfigured(env)) {
     return json({ error: "Downloads are not configured yet." }, 503);
   }
+  if (await rateLimited(request, env.AUTH_LIMITER)) {
+    return tooManyAttempts();
+  }
 
-  let password = "";
+  let code = "";
   try {
     const body = await request.json();
-    password = typeof body.password === "string" ? body.password.trim() : "";
+    code = typeof body.code === "string" ? body.code : "";
   } catch {
-    return json({ error: "Send the password as JSON." }, 400);
+    return json({ error: "Send the code as JSON." }, 400);
   }
 
-  if (!(await hashesEqual(password, expected))) {
-    return json({ error: "That password is not correct." }, 401);
+  const tester = await testerForCode(env, code);
+  if (!tester) {
+    return json({ error: "That code is not correct." }, 401);
   }
 
-  const token = await signSession(expected);
+  trackUse(env, request, ctx, tester.hash);
+  const token = await signSession(env, tester.hash);
   return json({ ok: true }, 200, { "Set-Cookie": sessionCookie(token, request.url) });
+}
+
+// Gate for the JSON routes. Returns the response to send, or null when allowed.
+async function denyApi(request, env, ctx) {
+  const auth = await authenticate(request, env);
+  if (auth.tester) {
+    if (auth.via === "basic") {
+      trackUse(env, request, ctx, auth.tester.hash);
+    }
+    return null;
+  }
+  if (auth.status === 503) {
+    return json({ error: "Downloads are not configured yet." }, 503);
+  }
+  if (auth.status === 429) {
+    return tooManyAttempts();
+  }
+  return json({ error: "Enter your tester code." }, 401);
 }
 
 async function handleReleases(env) {
@@ -129,16 +165,10 @@ const UPDATES_PREFIX = "/updates/";
 const UPDATER_TAG = /^v\d+\.\d+\.\d+[a-z]?$/;
 const UPDATER_FILE = /^[A-Za-z0-9._+-]+(\.AppImage|\.msi|-setup\.exe)$/;
 const MANIFEST_MAX_AGE = 300;
+// Per-IP limits live in wrangler.toml: the manifest is loose (apps check on
+// launch), bundles are tight (each one costs a GitHub API call and a large
+// download), and tester code attempts are tight (each one costs a KV read).
 const RATE_LIMIT_PERIOD = 60;
-
-// Keyed by client IP. Limits live in wrangler.toml: the manifest is loose
-// (apps check on launch), bundles are tight (each one costs a GitHub API call
-// and a large download).
-async function updatesRateLimited(request, limiter) {
-  const key = request.headers.get("CF-Connecting-IP") || "unknown";
-  const { success } = await limiter.limit({ key });
-  return !success;
-}
 
 async function handleUpdateManifest(request, env, ctx) {
   const cache = caches.default;
@@ -251,7 +281,7 @@ function aptUnauthorized(request) {
       : new URL("/downloads", request.url);
     return Response.redirect(downloads, 302);
   }
-  return new Response("Tester password required.\n", {
+  return new Response("Tester code required.\n", {
     status: 401,
     headers: {
       "WWW-Authenticate": 'Basic realm="ClipSpan testers"',
@@ -261,20 +291,34 @@ function aptUnauthorized(request) {
   });
 }
 
-async function handleApt(request, env) {
+function aptText(body, status, extraHeaders = {}) {
+  return new Response(body, {
+    status,
+    headers: {
+      "Cache-Control": "no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+      ...extraHeaders,
+    },
+  });
+}
+
+async function handleApt(request, env, ctx) {
   const pathname = aptAssetPathname(new URL(request.url));
   if (!aptPathIsPublic(pathname)) {
-    if (!String(env.DOWNLOADS_PASSWORD || "").trim()) {
-      return new Response("Downloads are not configured yet.\n", {
-        status: 503,
-        headers: {
-          "Cache-Control": "no-store",
-          "Content-Type": "text/plain; charset=utf-8",
-        },
+    const auth = await authenticate(request, env);
+    if (auth.status === 503) {
+      return aptText("Downloads are not configured yet.\n", 503);
+    }
+    if (auth.status === 429) {
+      return aptText("Too many attempts. Try again in a minute.\n", 429, {
+        "Retry-After": String(RATE_LIMIT_PERIOD),
       });
     }
-    if (!(await isAuthorized(request, env))) {
+    if (!auth.tester) {
       return aptUnauthorized(request);
+    }
+    if (auth.via === "basic") {
+      trackUse(env, request, ctx, auth.tester.hash);
     }
   }
   const upstream = await env.ASSETS.fetch(aptAssetRequest(request));
@@ -295,7 +339,7 @@ export default {
     if (url.pathname.startsWith(UPDATES_PREFIX) && request.method === "GET") {
       const isManifest = url.pathname === `${UPDATES_PREFIX}latest.json`;
       const limiter = isManifest ? env.UPDATES_MANIFEST_LIMITER : env.UPDATES_FILE_LIMITER;
-      if (await updatesRateLimited(request, limiter)) {
+      if (await rateLimited(request, limiter)) {
         return json({ error: "Too many update requests. Try again shortly." }, 429, {
           "Retry-After": String(RATE_LIMIT_PERIOD),
         });
@@ -304,27 +348,21 @@ export default {
     }
 
     if (url.pathname === "/api/auth" && request.method === "POST") {
-      return handleAuth(request, env);
+      return handleAuth(request, env, ctx);
     }
 
     if (url.pathname === "/api/releases" && request.method === "GET") {
-      if (!(await isAuthorized(request, env))) {
-        return json({ error: "Sign in with the tester password." }, 401);
-      }
-      return handleReleases(env);
+      return (await denyApi(request, env, ctx)) || handleReleases(env);
     }
 
     if (url.pathname === "/api/download" && request.method === "GET") {
-      if (!(await isAuthorized(request, env))) {
-        return json({ error: "Sign in with the tester password." }, 401);
-      }
-      return handleDownload(request, env);
+      return (await denyApi(request, env, ctx)) || handleDownload(request, env);
     }
 
     // apt.clipspan.com serves public/apt at the URL root. www /apt is the
     // same tree. GitHub Pages cannot host this: clipspan is a private repo.
     if (isAptRequest(url)) {
-      return handleApt(request, env);
+      return handleApt(request, env, ctx);
     }
 
     return env.ASSETS.fetch(request);
