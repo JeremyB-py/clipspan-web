@@ -616,7 +616,8 @@ select option {
 }
 
 .policy {
-  width: min(720px, 100%);
+  /* Same side gutter as .wrap, which this width would otherwise override on phones. */
+  width: min(720px, calc(100% - 2.5rem));
   padding: 2rem 0 3rem;
   line-height: 1.6;
 }
