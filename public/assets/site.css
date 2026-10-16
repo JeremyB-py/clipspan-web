@@ -637,7 +637,8 @@ select option {
   margin-bottom: 0.75rem;
 }
 
-.policy ul {
+.policy ul,
+.policy ol {
   margin: 0 0 1rem 1.2rem;
 }
 

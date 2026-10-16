@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delete your account - ClipSpan</title>
+  <meta
+    name="description"
+    content="How to delete your ClipSpan account, what is deleted, what is kept, and for how long."
+  />
+  <link rel="canonical" href="https://clipspan.com/delete-account" />
+  <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
+  <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
+  <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
+  <link rel="stylesheet" href="assets/site.css?v=6" />
+</head>
+<body>
+  <header class="wrap site-header">
+    <a class="brand-mark" href="/">
+      <img
+        src="assets/logo-mark.png?v=4"
+        srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+        alt=""
+        width="36"
+        height="36"
+      />
+      <span><span class="word-clip">Clip</span><span class="word-span">Span</span></span>
+    </a>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="wrap policy">
+    <h1>Delete your ClipSpan account</h1>
+    <p class="meta">Last updated: 15 October 2026 · Applies to ClipSpan for Android, Linux, and Windows</p>
+
+    <p>
+      A ClipSpan account is optional. It adds cloud sync and an encrypted backup of your
+      clipboard history. Local history and QR pairing work without one. This page explains
+      how to delete your account, what ClipSpan stores for it, and what is kept afterward.
+    </p>
+    <p>
+      It covers accounts on ClipSpan's own servers. If you signed in to a self-hosted server,
+      its operator holds that data.
+    </p>
+
+    <h2>Option 1: Delete it in the app</h2>
+    <ol>
+      <li>
+        Open ClipSpan and go to <strong>Account</strong>. On Android, tap <strong>Account</strong>
+        on the main screen. On Windows and Linux, open the <strong>Account</strong> tab.
+      </li>
+      <li>
+        Select <strong>Delete account</strong>. On Windows and Linux it is under
+        <strong>Danger zone</strong>.
+      </li>
+      <li>Type your account email to confirm, then select <strong>Delete account</strong>.</li>
+    </ol>
+    <p>If you can't sign in, or the app can't reach ClipSpan's server, the app links back to this page.</p>
+
+    <h2>Option 2: Ask us by email</h2>
+    <p>
+      Use this if you can't sign in, for example because you forgot your password or lost your
+      device, or if you no longer have the app.
+    </p>
+    <ol>
+      <li>
+        Email
+        <a href="mailto:contact@clipspan.com?subject=Delete%20my%20ClipSpan%20account">contact@clipspan.com</a>
+        from the address you sign in to ClipSpan with, with the subject
+        "Delete my ClipSpan account". Don't include your password.
+      </li>
+      <li>We reply to that address and ask you to confirm before doing anything.</li>
+      <li>
+        Once you confirm, we delete the account within 7 days. It is then erased on the same
+        schedule as deleting it in the app.
+      </li>
+    </ol>
+
+    <h2>What is deleted, and when</h2>
+    <p>Deleting the account signs out every device immediately. You can't restore a deleted account.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Deleted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sign-in sessions on all your devices</td>
+          <td>Ended immediately. Session records are erased after 7 days.</td>
+        </tr>
+        <tr>
+          <td>Clips and images waiting on the relay for delivery to another device</td>
+          <td>
+            Immediately. If the relay can't be reached at that moment, ClipSpan keeps retrying,
+            and undelivered items expire on their own after 72 hours.
+          </td>
+        </tr>
+        <tr>
+          <td>Account email and sign-in key hash</td>
+          <td>
+            After 7 days. Until then the account can't be used and the email address can't be
+            registered again.
+          </td>
+        </tr>
+        <tr>
+          <td>Device list (names, platforms, public encryption keys)</td>
+          <td>After 7 days</td>
+        </tr>
+        <tr>
+          <td>Encrypted vault backup and its attachments</td>
+          <td>After 7 days</td>
+        </tr>
+        <tr>
+          <td>Synced settings</td>
+          <td>After 7 days</td>
+        </tr>
+        <tr>
+          <td>Pending "Delete forever" requests</td>
+          <td>After 7 days</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What is kept</h2>
+    <ul>
+      <li>
+        <strong>Bug reports and suggestions</strong> you sent from the app are stored separately,
+        as private GitHub issues. They can include your account ID and device ID along with what
+        you wrote. Deleting the account doesn't remove them. Ask in your email and we'll delete
+        them too.
+      </li>
+      <li>
+        <strong>Keyboard word contributions</strong> are anonymous and never linked to your
+        account. You can delete a pending contribution for 30 days after sending it. After that,
+        only anonymous word counts are kept.
+      </li>
+      <li>
+        <strong>Backups.</strong> Encrypted database backups keep their copy of your account until
+        they rotate out, up to 30 days after deletion.
+      </li>
+      <li>
+        <strong>Server logs</strong> can include your email address, for example after a failed
+        sign-in. They are kept for up to 30 days.
+      </li>
+    </ul>
+
+    <h2>Data on your devices</h2>
+    <p>
+      Deleting the account doesn't touch what is stored on your phone or computer. Clipboard
+      history, pinned items, and pairings stay on each device. To remove them, clear history in
+      ClipSpan's settings or uninstall the app.
+    </p>
+
+    <h2>What ClipSpan stores for an account</h2>
+    <p>
+      This is everything ClipSpan's account server and relay hold. Your password never leaves
+      your device, and clipboard history is encrypted on your device before upload.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account</td>
+          <td>
+            Email, a hash of the sign-in key your device derives from your password, created and
+            updated dates, and synced settings
+          </td>
+        </tr>
+        <tr>
+          <td>Devices</td>
+          <td>
+            Name, platform, public encryption key, Wi-Fi sync key fingerprint (computers only),
+            when it was added and last seen, and whether it is active or revoked
+          </td>
+        </tr>
+        <tr>
+          <td>Sessions</td>
+          <td>Hashed sign-in tokens, their expiry, and whether the device is trusted</td>
+        </tr>
+        <tr>
+          <td>Vault backup</td>
+          <td>Your history and attachments, end-to-end encrypted, with their size and last update</td>
+        </tr>
+        <tr>
+          <td>"Delete forever" requests</td>
+          <td>IDs and hashes of clips you deleted forever, until each of your devices confirms</td>
+        </tr>
+        <tr>
+          <td>Relay</td>
+          <td>
+            Encrypted clips and images waiting for delivery to another device. Undelivered items
+            expire after 72 hours and are removed within about 10 minutes of expiring.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Get a copy of your data</h2>
+    <p>
+      Email
+      <a href="mailto:contact@clipspan.com?subject=My%20ClipSpan%20account%20data">contact@clipspan.com</a>
+      from your account address. We reply to confirm the request first, then send what the server
+      stores for your account:
+    </p>
+    <ul>
+      <li>Your account ID, email, and created and updated dates</li>
+      <li>Your synced settings</li>
+      <li>Each device's name, platform, and status, and when it was added and last seen</li>
+      <li>How many sessions are active</li>
+      <li>Your vault backup's size, when it was last updated, and its number of attachments</li>
+      <li>The number of pending "Delete forever" requests</li>
+    </ul>
+    <p>
+      The vault backup is end-to-end encrypted, so ClipSpan can't read it or include its
+      contents.
+    </p>
+
+    <h2>Tester signup list</h2>
+    <p>
+      Signing up to test on this site doesn't create a ClipSpan account. To be removed
+      from the list, email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>.
+    </p>
+
+    <p class="muted">
+      See the <a href="privacy.html">privacy policy</a> for how ClipSpan handles data overall.
+    </p>
+  </main>
+
+  <footer class="wrap site-footer">
+    <div class="footer-row">
+      <p class="footer-brand">
+        <img
+          src="assets/logo-mark.png?v=4"
+          srcset="assets/logo-mark.png?v=4 1x, assets/logo-mark-256.png?v=4 2x"
+          alt=""
+          width="28"
+          height="28"
+        />
+        <span>© <span id="year"></span> ClipSpan. Testing is open.</span>
+      </p>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = String(new Date().getFullYear());
+  </script>
+</body>
+</html>
