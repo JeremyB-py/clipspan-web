@@ -6,7 +6,7 @@
   <title>ClipSpan - Copy here. Paste anywhere</title>
   <meta
     name="description"
-    content="ClipSpan synchronizes clipboard content and history between Android, Linux, and Windows. Local-first, with optional end-to-end encrypted account sync. Private testing is starting."
+    content="ClipSpan syncs clipboard content and history between Android, Linux, and Windows. Local-first and end-to-end encrypted. Testing is open."
   />
   <link rel="canonical" href="https://clipspan.com/" />
   <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
@@ -20,7 +20,7 @@
   <meta property="og:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     property="og:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first and end-to-end encrypted. Testing is open."
   />
   <meta property="og:image" content="https://clipspan.com/assets/og-image.png?v=5" />
   <meta property="og:site_name" content="ClipSpan" />
@@ -28,10 +28,10 @@
   <meta name="twitter:title" content="ClipSpan - Copy here. Paste anywhere" />
   <meta
     name="twitter:description"
-    content="Clipboard history and sync for Android, Linux, and Windows. Local-first. Private testing is starting."
+    content="Clipboard history and sync for Android, Linux, and Windows. Local-first and end-to-end encrypted. Testing is open."
   />
   <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=5" />
-  <link rel="stylesheet" href="assets/site.css?v=5" />
+  <link rel="stylesheet" href="assets/site.css?v=6" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -48,7 +48,7 @@
     <nav class="header-nav" aria-label="Primary">
       <a href="privacy.html">Privacy</a>
       <a href="/downloads">Downloads</a>
-      <a href="#access">Early access</a>
+      <a href="#access">Join testing</a>
     </nav>
   </header>
 
@@ -68,15 +68,37 @@
           <p class="tagline">Copy here. Paste anywhere.</p>
           <p class="lede">
             Clipboard history and sync for Android, Linux, and Windows.
-            Private testing is starting, followed by a public tester group.
+            Testing is open: sign up and we'll email you a tester code.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#access">Request early access</a>
+            <a class="btn btn-primary" href="#access">Sign up to test</a>
             <a class="btn btn-orbit" href="#how">Features</a>
           </div>
-          <p class="hero-note">Local QR pairing by default. An account uses ClipSpan Cloud. Self-hosting is still available.</p>
+          <p class="hero-note">Pair on your Wi-Fi with a QR code, no account needed. Sync is end-to-end encrypted.</p>
         </div>
       </div>
+      <figure class="hero-media" id="launch">
+        <video
+          id="launch-video"
+          controls
+          preload="none"
+          playsinline
+          width="1920"
+          height="1080"
+          poster="assets/launch-video-poster.jpg?v=1"
+          aria-describedby="launch-video-desc"
+        >
+          <source src="assets/launch-video.mp4?v=1" type="video/mp4" />
+        </video>
+        <button class="video-play" id="launch-play" type="button" hidden aria-label="Play the 34-second ClipSpan video">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 6 3.5Z" /></svg>
+        </button>
+      </figure>
+      <p class="media-caption" id="launch-video-desc">
+        ClipSpan in 34 seconds, with music. A link copied on an Android phone shows up on a Linux laptop and a Windows PC,
+        an address from days ago comes back from the history picker, a phone pairs by QR code, and a laptop that drops
+        off Wi-Fi catches up when it reconnects.
+      </p>
       <section class="hero-overview" aria-labelledby="overview-title">
         <p class="section-label">What ClipSpan does</p>
         <h2 id="overview-title">Use your clipboard across your devices</h2>
@@ -99,14 +121,22 @@
           </li>
         </ul>
       </section>
-      <figure class="hero-media">
+    </section>
+
+    <section class="wrap" id="how" aria-labelledby="how-title">
+      <p class="section-label">Features</p>
+      <h2 id="how-title">Features</h2>
+      <p class="section-intro">
+        ClipSpan keeps clipboard history on your devices. Sync supported clips automatically or send one item when you choose.
+      </p>
+      <figure class="feature-media">
         <video
-          id="hero-video"
-          autoplay
+          id="demo-video"
+          controls
           muted
           loop
           playsinline
-          preload="auto"
+          preload="none"
           width="1600"
           height="900"
           poster="assets/demo-loop-poster.jpg?v=2"
@@ -116,14 +146,6 @@
           <source src="assets/demo-loop.mp4?v=2" type="video/mp4" />
         </video>
       </figure>
-    </section>
-
-    <section class="wrap" id="how" aria-labelledby="how-title">
-      <p class="section-label">Features</p>
-      <h2 id="how-title">Features</h2>
-      <p class="section-intro">
-        ClipSpan keeps clipboard history on your devices. Sync supported clips automatically or send one item when you choose.
-      </p>
       <div class="split">
         <ul class="works-list">
           <li>
@@ -144,7 +166,14 @@
             <span class="pill pill-active">Pairing</span>
             <div>
               <p class="item-title">Local network pairing</p>
-              <p class="item-body">Pair over your LAN with a QR code, without an account. Local-only mode never contacts ClipSpan servers.</p>
+              <p class="item-body">Pair over your Wi-Fi with a QR code, without an account, or type the pairing link if the phone has no camera. Wi-Fi sync is encrypted, and the phone checks the computer's key from the QR code. Local-only mode never contacts ClipSpan servers.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill-active">Offline</span>
+            <div>
+              <p class="item-title">Catches up after time offline</p>
+              <p class="item-body">Clips copied while a device was offline reach your other devices when it reconnects, in the order you copied them, without replacing what's on their clipboard.</p>
             </div>
           </li>
         </ul>
@@ -160,14 +189,14 @@
             <span class="pill pill-active">Media</span>
             <div>
               <p class="item-title">Images and other multimedia</p>
-              <p class="item-body">History can hold text and images. Files and links are in active testing. Automatic sync still respects your size and sensitive-content settings.</p>
+              <p class="item-body">Text and images sync between Android, Linux, and Windows. Files and links are in active testing. Automatic sync still respects your size and sensitive-content settings.</p>
             </div>
           </li>
           <li>
             <span class="pill pill-active">Account</span>
             <div>
               <p class="item-title">Optional account, backup, and relay</p>
-              <p class="item-body">Sign in to ClipSpan Cloud for encrypted history backup and text relay when you are off the LAN. Same-account devices on the same Wi-Fi can pair without a QR scan. Self-host with a custom Account API URL.</p>
+              <p class="item-body">Sign in to ClipSpan Cloud for encrypted history backup and relay of text and images when you're away from your Wi-Fi. Your password never leaves your device. Same-account devices on the same Wi-Fi can pair without a QR scan. Self-host with a custom Account API URL.</p>
             </div>
           </li>
         </ul>
@@ -177,7 +206,7 @@
     <section class="wrap" id="platforms" aria-labelledby="platforms-title">
       <p class="section-label">Platforms</p>
       <h2 id="platforms-title">Where ClipSpan runs</h2>
-      <p class="section-intro">Android and Linux are the active focus. Windows is in early testing. iOS and Mac are tentatively planned.</p>
+      <p class="section-intro">ClipSpan runs on Android, Linux, and Windows, all in testing now. iOS and Mac are tentatively planned.</p>
       <ul class="status-list">
         <li>
           <span class="pill pill-active">Active</span>
@@ -194,10 +223,10 @@
           </div>
         </li>
         <li>
-          <span class="pill pill-testing">Early<br />testing</span>
+          <span class="pill pill-active">Active</span>
           <div>
             <p class="item-title">Windows</p>
-            <p class="item-body">Same desktop app as Linux, including first-run setup and updates. Functional today, but not tested as thoroughly as Android and Linux.</p>
+            <p class="item-body">Same desktop app as Linux, with first-run setup and in-app updates. Copies text and images, and the installer is code-signed.</p>
           </div>
         </li>
         <li>
@@ -230,7 +259,7 @@
             <span class="pill pill-active">Yes</span>
             <div>
               <p class="item-title">Is clipboard data end-to-end encrypted?</p>
-              <p class="item-body">On the optional account/relay path, payloads and credential vaults are end-to-end encrypted. Servers do not receive clipboard plaintext.</p>
+              <p class="item-body">Yes, on both paths. Wi-Fi sync runs device to device over TLS, and the phone checks the computer's key from the QR code. Through ClipSpan Cloud, clips and images are end-to-end encrypted, and the servers never receive clipboard plaintext.</p>
             </div>
           </li>
           <li>
@@ -252,13 +281,14 @@
           <h3>Defaults and choices</h3>
           <ul>
             <li>Synchronization is optional. Send Clip moves an item without turning on automatic sync.</li>
-            <li>Password fields on Android keep sync actions disabled.</li>
+            <li>Copies a password manager marks as sensitive stay out of History and never sync, unless you change that in Settings.</li>
+            <li>Password fields on Android keep sync actions disabled, and ClipSpan Keyboard pauses sync in private browser tabs.</li>
             <li>ClipSpan Keyboard can see text in the focused field, like any Android keyboard. Keystrokes stay on the device unless you copy or send a clip.</li>
-            <li>You choose whether to enable account sync at all. Encrypted history backup is optional.</li>
+            <li>You choose whether to enable account sync at all. Encrypted history backup is optional, and your account password never leaves your device.</li>
             <li>Diagnostics and bug reports omit clipboard contents, tokens, and pairing secrets.</li>
-            <li>Creating an account uses ClipSpan Cloud (api.clipspan.com). Relay moves text when you are off the LAN.</li>
-            <li>Self-host with a custom Account API URL.</li>
-            <li>Local QR pairing stays the default if you never sign in.</li>
+            <li>An account uses ClipSpan Cloud (api.clipspan.com), which relays text and images when you're away from your Wi-Fi. You can self-host with a custom Account API URL instead.</li>
+            <li>Local QR pairing stays the default if you never sign in. A phone paired by typing the short link, instead of scanning the QR code, trusts the first computer it reaches.</li>
+            <li>Delete your account from the app, or on the <a href="/delete-account">delete account</a> page.</li>
           </ul>
         </div>
       </div>
@@ -275,10 +305,11 @@
               height="640"
               alt="ClipSpan"
             />
-            <p class="section-label">Early access</p>
-            <h2 id="access-title">Get notified when tester builds are ready</h2>
+            <p class="section-label">Testing</p>
+            <h2 id="access-title">Testing is open</h2>
             <p class="section-intro">
-              Private testing is starting, then a small public tester group. Leave an email if you want a spot. No account is created today.
+              Sign up and we'll email you a tester code for the downloads page, with builds for Android, Linux, and Windows.
+              Signing up doesn't create a ClipSpan account.
             </p>
           </div>
 
@@ -295,7 +326,7 @@
             method="POST"
             novalidate
           >
-            <input type="hidden" name="_subject" value="ClipSpan early access request" />
+            <input type="hidden" name="_subject" value="ClipSpan tester signup" />
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display: none" aria-hidden="true" />
 
             <label>
@@ -336,11 +367,11 @@
               <legend class="section-label" style="margin-bottom: 0.35rem">Testing</legend>
               <label class="check">
                 <input type="checkbox" name="willing_to_test" value="yes" />
-                <span>I am interested in testing an early build</span>
+                <span>Send me a tester code now (leave unchecked for launch news only)</span>
               </label>
               <label class="check">
                 <input type="checkbox" name="privacy_ack" value="yes" required />
-                <span>I agree my email may be used to contact me about ClipSpan early access, per the <a href="privacy.html">privacy policy</a></span>
+                <span>I agree my email may be used to contact me about ClipSpan testing, per the <a href="privacy.html">privacy policy</a></span>
               </label>
             </fieldset>
 
@@ -349,7 +380,7 @@
               <textarea class="field" name="notes" rows="3" placeholder="Wayland setup, Android version, privacy concerns…"></textarea>
             </label>
 
-            <button class="btn btn-primary" type="submit">Request early access</button>
+            <button class="btn btn-primary" type="submit">Sign up to test</button>
             <p class="form-note">
               We will not sell your address. See the <a href="privacy.html">privacy policy</a>.
               Contact: <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
@@ -371,13 +402,14 @@
           width="28"
           height="28"
         />
-        <span>© <span id="year"></span> ClipSpan. Private testing is starting.</span>
+        <span>© <span id="year"></span> ClipSpan. Testing is open.</span>
       </p>
       <div class="footer-links">
         <a href="privacy.html">Privacy</a>
         <a href="/downloads">Downloads</a>
+        <a href="/delete-account">Delete account</a>
         <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
-        <a href="#access">Early access</a>
+        <a href="#access">Join testing</a>
       </div>
     </div>
   </footer>
@@ -385,12 +417,36 @@
   <script>
     document.getElementById("year").textContent = String(new Date().getFullYear());
 
-    // Reduced motion: show the first frame with controls instead of autoplaying the demo loop.
-    const heroVideo = document.getElementById("hero-video");
-    if (heroVideo && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      heroVideo.removeAttribute("autoplay");
-      heroVideo.pause();
-      heroVideo.controls = true;
+    // Launch video: poster with a play button; nothing downloads until it is pressed.
+    // Without JS the native controls stay.
+    const launchVideo = document.getElementById("launch-video");
+    const launchPlay = document.getElementById("launch-play");
+    if (launchVideo && launchPlay) {
+      launchVideo.controls = false;
+      launchPlay.hidden = false;
+      launchPlay.addEventListener("click", () => {
+        launchVideo.parentElement.classList.add("is-playing");
+        launchVideo.controls = true;
+        launchVideo.focus();
+        launchVideo.play().catch(() => {});
+      });
+    }
+
+    // Demo loop: plays muted only while on screen. Reduced motion keeps the controls instead.
+    const demoVideo = document.getElementById("demo-video");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (demoVideo && !reduceMotion && "IntersectionObserver" in window) {
+      demoVideo.controls = false;
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            demoVideo.play().catch(() => {});
+          } else {
+            demoVideo.pause();
+          }
+        },
+        { threshold: 0.5 },
+      ).observe(demoVideo);
     }
 
     const form = document.getElementById("early-access-form");
@@ -434,15 +490,20 @@
         });
 
         if (!response.ok) {
-          throw new Error("Request failed");
+          const detail = await response.json().catch(() => null);
+          throw new Error(detail?.error || `Request failed (${response.status})`);
         }
 
+        const wantsCode = form.elements.namedItem("willing_to_test").checked;
         form.reset();
         status.dataset.state = "ok";
-        status.textContent = "Thanks. We will be in touch when tester builds are ready.";
+        status.textContent = wantsCode
+          ? "Thanks. Watch your inbox for your tester code."
+          : "Thanks. We'll email you launch news.";
       } catch (error) {
+        console.error("Early access signup failed:", error);
         status.dataset.state = "err";
-        status.textContent = "Something went wrong. Email contact@clipspan.com instead.";
+        status.textContent = "Something went wrong. Please email contact@clipspan.com instead.";
       }
     });
   </script>

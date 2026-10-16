@@ -67,8 +67,10 @@ a:hover {
 
 .site-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 0.6rem 1.25rem;
   padding: 1.25rem 0 0.5rem;
 }
 
@@ -111,6 +113,7 @@ a:hover {
 
 .header-nav a {
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .btn {
@@ -216,17 +219,6 @@ h2 {
   background: rgba(29, 78, 216, 0.28);
   border-color: rgba(59, 130, 246, 0.45);
   color: #bfdbfe;
-}
-
-.pill-testing {
-  white-space: normal;
-  text-align: center;
-  line-height: 1.15;
-  border-radius: 999px;
-  padding: 0.32rem 0.55rem;
-  background: rgba(125, 211, 252, 0.14);
-  border-color: rgba(125, 211, 252, 0.4);
-  color: #bae6fd;
 }
 
 .pill-soon {
@@ -361,6 +353,7 @@ textarea::placeholder {
 .hero {
   padding: 2.5rem 0 3.25rem;
   display: grid;
+  justify-items: center;
   gap: 1.75rem;
 }
 
@@ -376,7 +369,7 @@ textarea::placeholder {
 
 .hero-logo {
   display: block;
-  width: clamp(128px, 18vw, 188px);
+  width: clamp(96px, 12vw, 140px);
   height: auto;
   margin: 0 auto 0.2rem;
   filter: drop-shadow(0 12px 32px rgba(59, 130, 246, 0.4));
@@ -469,8 +462,9 @@ textarea::placeholder {
   font-size: 0.94rem;
 }
 
-.hero-media {
-  animation: rise 900ms 120ms ease both;
+.hero-media,
+.feature-media {
+  position: relative;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -480,15 +474,66 @@ textarea::placeholder {
   max-width: 56rem;
 }
 
-.hero-media picture {
-  display: block;
+.hero-media {
+  animation: rise 900ms 120ms ease both;
 }
 
-.hero-media img,
-.hero-media video {
+.feature-media {
+  margin-bottom: 1.75rem;
+}
+
+.hero-media video,
+.feature-media video {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Click-to-play button over the launch video poster; hidden until JS takes over. */
+.video-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: clamp(4rem, 11vw, 5.5rem);
+  height: clamp(4rem, 11vw, 5.5rem);
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--orbit) 100%);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.video-play[hidden],
+.is-playing .video-play {
+  display: none;
+}
+
+.video-play svg {
+  width: 42%;
+  height: 42%;
+  margin-left: 8%;
+}
+
+.video-play:hover {
+  transform: scale(1.06);
+  box-shadow: 0 14px 42px rgba(235, 128, 35, 0.45);
+}
+
+.video-play:focus-visible {
+  outline: 3px solid var(--text-bright);
+  outline-offset: 4px;
+}
+
+.media-caption {
+  max-width: 56rem;
+  margin-top: -0.75rem;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+  text-align: center;
 }
 
 @media (max-width: 700px) {

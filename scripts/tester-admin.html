@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tester codes - ClipSpan admin</title>
+  <style>
+    :root {
+      --bg: #0b1f3a;
+      --surface: #123056;
+      --surface-2: #102a4a;
+      --border: #1e4976;
+      --text: #bfdbfe;
+      --text-bright: #dbeafe;
+      --text-soft: #93c5fd;
+      --accent: #1d4ed8;
+      --accent-border: #3b82f6;
+      --orbit: #eb8023;
+      --warn-bg: #78350f55;
+      --warn-text: #fde68a;
+      --danger: #7f1d1d;
+      --danger-text: #fecaca;
+      --ok: #86efac;
+      --radius: 8px;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: ui-monospace, "Cascadia Code", "DejaVu Sans Mono", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 var(--font);
+      padding: 2rem 1rem 3rem;
+    }
+
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h1 {
+      color: var(--text-bright);
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      color: var(--text-bright);
+      font-size: 1.05rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 0.15rem 0.65rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    .badge[data-mode="live"] {
+      background: var(--orbit);
+      border-color: var(--orbit);
+      color: #061525;
+    }
+
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      display: grid;
+      gap: 0.85rem;
+      /* Grid items otherwise grow to the table's width instead of letting it scroll. */
+      min-width: 0;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: end;
+    }
+
+    label {
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      flex: 1 1 14rem;
+    }
+
+    input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-bright);
+      font: inherit;
+      padding: 0.5rem 0.65rem;
+    }
+
+    input:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent-border);
+      outline-offset: 2px;
+    }
+
+    button {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-bright);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 600;
+      padding: 0.5rem 0.9rem;
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent-border);
+    }
+
+    button.danger {
+      background: transparent;
+      border-color: var(--danger);
+      color: var(--danger-text);
+      padding: 0.25rem 0.65rem;
+      font-size: 0.85rem;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: progress;
+    }
+
+    details summary {
+      cursor: pointer;
+      color: var(--text-soft);
+      font-size: 0.88rem;
+    }
+
+    details[open] summary {
+      margin-bottom: 0.5rem;
+    }
+
+    .muted {
+      color: var(--text-soft);
+      font-size: 0.88rem;
+    }
+
+    .status[data-state="err"],
+    .error {
+      color: var(--danger-text);
+      white-space: pre-wrap;
+    }
+
+    .status[data-state="ok"] {
+      color: var(--ok);
+    }
+
+    .new-code {
+      background: var(--warn-bg);
+      border-color: rgba(253, 230, 138, 0.3);
+    }
+
+    .code {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
+      color: var(--warn-text);
+      word-break: break-all;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      /* Keeps the absolutely positioned .sr-only header inside the scroll area. */
+      position: relative;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--text-soft);
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    td.num {
+      font-variant-numeric: tabular-nums;
+    }
+
+    td.many-countries {
+      color: var(--warn-text);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Tester codes</h1>
+      <span class="badge" id="mode" hidden></span>
+    </header>
+
+    <p class="error" id="fatal" hidden></p>
+
+    <section class="card" aria-labelledby="add-title">
+      <h2 id="add-title">Add a tester</h2>
+      <form id="add-form" class="row">
+        <label>
+          Name
+          <input name="name" required maxlength="64" autocomplete="off" placeholder="Alex Kim" />
+        </label>
+        <button class="primary" type="submit">Create code</button>
+      </form>
+      <details>
+        <summary>Use an existing code instead</summary>
+        <p class="muted">
+          For example the old shared password, so it keeps working while testers switch over.
+          Fill this in before selecting Create code.
+        </p>
+        <label>
+          Existing code
+          <input form="add-form" name="code" type="password" autocomplete="off" />
+        </label>
+      </details>
+      <p class="status muted" id="add-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card new-code" id="new-code" aria-labelledby="new-code-title" hidden>
+      <h2 id="new-code-title"></h2>
+      <p class="code" id="new-code-value"></p>
+      <p class="muted">This is the only time it is shown. Only its hash is stored.</p>
+      <div class="row">
+        <button type="button" id="copy-code">Copy code</button>
+        <button type="button" id="copy-invite">Copy invite message</button>
+        <button type="button" id="dismiss">Done</button>
+      </div>
+      <p class="status muted" id="copy-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="list-title">
+      <div class="row">
+        <h2 id="list-title" style="flex: 1">Testers</h2>
+        <button type="button" id="refresh">Refresh</button>
+      </div>
+      <p class="muted" id="list-status" role="status" aria-live="polite">Loading. wrangler takes a few seconds.</p>
+      <div class="table-wrap" id="table-wrap" hidden>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Created</th>
+              <th scope="col">Logins</th>
+              <th scope="col">Last login</th>
+              <th scope="col">Countries</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="muted">
+        A code used from several countries has probably been shared: revoke it and send that
+        tester a new one. The Google Play review code is expected to show several.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const token = new URLSearchParams(location.hash.slice(1)).get("token") || "";
+    const addForm = document.getElementById("add-form");
+    const addStatus = document.getElementById("add-status");
+    const listStatus = document.getElementById("list-status");
+    const rows = document.getElementById("rows");
+    const tableWrap = document.getElementById("table-wrap");
+    const refreshButton = document.getElementById("refresh");
+    const newCode = document.getElementById("new-code");
+    const copyStatus = document.getElementById("copy-status");
+    const MANY_COUNTRIES = 3;
+    let currentCode = "";
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, {
+        ...options,
+        headers: { "X-Admin-Token": token, "Content-Type": "application/json" },
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(payload.error || `Request failed (${response.status}).`);
+      }
+      return payload;
+    }
+
+    function setStatus(element, state, message) {
+      element.dataset.state = state;
+      element.textContent = message;
+    }
+
+    function formatDate(value, withTime) {
+      if (!value) {
+        return withTime ? "Never" : "";
+      }
+      const date = new Date(value);
+      return withTime
+        ? date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+        : date.toLocaleDateString(undefined, { dateStyle: "medium" });
+    }
+
+    function cell(text, className) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      if (className) {
+        td.className = className;
+      }
+      return td;
+    }
+
+    function renderTesters(testers) {
+      rows.replaceChildren();
+      for (const tester of testers) {
+        const tr = document.createElement("tr");
+        const many = tester.countries.length >= MANY_COUNTRIES;
+        const countries = cell(tester.countries.join(", ") || "None yet", many ? "many-countries" : "");
+        if (many) {
+          countries.title = "Used from several countries. Has this code been shared?";
+        }
+        const actions = document.createElement("td");
+        const revoke = document.createElement("button");
+        revoke.type = "button";
+        revoke.className = "danger";
+        revoke.textContent = "Revoke";
+        revoke.addEventListener("click", () => revokeTester(tester.name, revoke));
+        actions.append(revoke);
+        tr.append(
+          cell(tester.name),
+          cell(formatDate(tester.created, false)),
+          cell(String(tester.logins), "num"),
+          cell(formatDate(tester.lastLogin, true)),
+          countries,
+          actions,
+        );
+        rows.append(tr);
+      }
+      tableWrap.hidden = testers.length === 0;
+    }
+
+    async function loadTesters() {
+      refreshButton.disabled = true;
+      setStatus(listStatus, "", "Loading. wrangler takes a few seconds.");
+      try {
+        const { local, testers } = await api("/api/testers");
+        const mode = document.getElementById("mode");
+        mode.hidden = false;
+        mode.dataset.mode = local ? "local" : "live";
+        mode.textContent = local ? "Local (wrangler dev)" : "Live site";
+        renderTesters(testers);
+        setStatus(
+          listStatus,
+          "",
+          testers.length === 1 ? "1 tester." : `${testers.length} testers.`,
+        );
+      } catch (error) {
+        setStatus(listStatus, "err", error.message);
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    async function revokeTester(name, button) {
+      if (!confirm(`Revoke ${name}'s code? It stops working within about a minute, including open sessions.`)) {
+        return;
+      }
+      button.disabled = true;
+      setStatus(listStatus, "", `Revoking ${name}…`);
+      try {
+        await api("/api/testers/revoke", { method: "POST", body: JSON.stringify({ name }) });
+        await loadTesters();
+        setStatus(listStatus, "ok", `Revoked ${name}.`);
+      } catch (error) {
+        button.disabled = false;
+        setStatus(listStatus, "err", error.message);
+      }
+    }
+
+    function inviteText(code) {
+      return [
+        `Your ClipSpan tester code: ${code}`,
+        "",
+        "Download ClipSpan at https://clipspan.com/downloads and enter the code there.",
+        `Linux (Debian or Ubuntu): curl -fsSL -u "clipspan:${code}" https://apt.clipspan.com/install.sh | sudo bash`,
+        "",
+        "The code is just for you, so please don't share it.",
+      ].join("\n");
+    }
+
+    async function copy(text, message) {
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus(copyStatus, "ok", message);
+      } catch {
+        setStatus(copyStatus, "err", "Couldn't copy. Select the code and copy it by hand.");
+      }
+    }
+
+    addForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(addForm);
+      const name = String(data.get("name") || "").trim();
+      const code = String(data.get("code") || "");
+      const submit = addForm.querySelector("button[type=submit]");
+      submit.disabled = true;
+      setStatus(addStatus, "", `Creating a code for ${name}…`);
+      try {
+        const result = await api("/api/testers", {
+          method: "POST",
+          body: JSON.stringify({ name, code }),
+        });
+        addForm.reset();
+        if (result.code) {
+          currentCode = result.code;
+          document.getElementById("new-code-title").textContent = `Code for ${result.name}`;
+          document.getElementById("new-code-value").textContent = result.code;
+          setStatus(copyStatus, "", "");
+          newCode.hidden = false;
+          setStatus(addStatus, "ok", `Added ${result.name}.`);
+        } else {
+          setStatus(addStatus, "ok", `Added the existing code for ${result.name}.`);
+        }
+        await loadTesters();
+      } catch (error) {
+        setStatus(addStatus, "err", error.message);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    document.getElementById("copy-code").addEventListener("click", () =>
+      copy(currentCode, "Code copied."),
+    );
+    document.getElementById("copy-invite").addEventListener("click", () =>
+      copy(inviteText(currentCode), "Invite message copied."),
+    );
+    document.getElementById("dismiss").addEventListener("click", () => {
+      currentCode = "";
+      newCode.hidden = true;
+    });
+    refreshButton.addEventListener("click", loadTesters);
+
+    if (!token) {
+      const fatal = document.getElementById("fatal");
+      fatal.hidden = false;
+      fatal.textContent = "Open the URL printed in the terminal. It carries the access token.";
+      setStatus(listStatus, "err", "No access token.");
+    } else {
+      loadTesters();
+    }
+  </script>
+</body>
+</html>

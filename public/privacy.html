@@ -13,7 +13,7 @@
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=5" />
+  <link rel="stylesheet" href="assets/site.css?v=6" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -29,39 +29,42 @@
     </a>
     <nav class="header-nav" aria-label="Primary">
       <a href="/">Home</a>
-      <a href="/#access">Early access</a>
+      <a href="/#access">Join testing</a>
     </nav>
   </header>
 
   <main class="wrap policy">
     <h1>Privacy policy</h1>
-    <p class="meta">Last updated: 5 September 2026 · Applies to clipspan.com and the ClipSpan apps</p>
+    <p class="meta">Last updated: 15 October 2026 · Applies to clipspan.com and the ClipSpan apps</p>
 
     <p>
       ClipSpan is a clipboard history app for Android, Linux, and Windows. On Android,
       one install (<code>com.clipspan.app</code>) includes the companion UI and ClipSpan Keyboard.
-      This page covers the public website, early-access signup, and the apps testers install.
+      This page covers the public website, tester signup, and the apps testers install.
     </p>
     <p>
-      Questions about the product can also go to
-      <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
-      or an issue on
-      <a href="https://github.com/JeremyB-py/clipspan">github.com/JeremyB-py/clipspan</a>.
+      Questions about the product can go to
+      <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>.
     </p>
 
     <h2>What this site collects</h2>
-    <p>If you use the early-access form, we collect:</p>
+    <p>If you use the tester signup form, we collect:</p>
     <ul>
       <li>Your email address</li>
       <li>Platform preferences you select</li>
-      <li>Whether you are interested in testing an early build</li>
+      <li>Whether you asked for a tester code now</li>
       <li>How you heard about ClipSpan, if you choose to say</li>
       <li>Any optional notes you write</li>
       <li>Basic technical metadata from the form provider, such as submission time</li>
     </ul>
     <p>
-      We use this only to contact you about ClipSpan development, early testing,
+      We use this only to contact you about ClipSpan development, testing,
       and related product updates you asked for.
+    </p>
+    <p>
+      If you use a tester code on the downloads page or with the Linux install script, we
+      record how many times the code was used, when it was last used, and the countries it
+      was used from. We use this only to tell whether a code has been shared.
     </p>
 
     <h2>What we do not do with signup data</h2>
@@ -154,11 +157,25 @@
           <td>No</td>
         </tr>
         <tr>
+          <td>Sign-in key derived from your password</td>
+          <td>Received at sign-in, stored only as a hash</td>
+        </tr>
+        <tr>
           <td>Account password, recovery key, device private keys</td>
           <td>No</td>
         </tr>
       </tbody>
     </table>
+    <p>
+      ClipSpan's servers never receive your account password. When you sign in, the app derives
+      a key from your password on your device and sends that key instead. The server stores only
+      a hash of it. The same password encrypts your vault backup on your device, and ClipSpan's
+      servers can't read the backup.
+    </p>
+    <p>
+      Use a strong password. The server holds values derived from it, so a weak password could
+      be guessed.
+    </p>
     <p>
       Resetting the account password without the old password or recovery key starts a new empty vault.
     </p>
@@ -168,10 +185,14 @@
       <li>Advertising identifiers or analytics SDKs</li>
       <li>Precise location</li>
       <li>Contacts, photos, or files except clipboard or share content you send through ClipSpan</li>
+      <li>
+        Access to your photo library. The Android app doesn't request the Photos and videos
+        permission. Images reach ClipSpan only when you copy or share them.
+      </li>
       <li>Keystroke logs uploaded to ClipSpan</li>
     </ul>
     <p class="muted">
-      Crash and bug reports you file on GitHub are public. Do not paste secrets into them.
+      Bug reports you send from the app are stored as private GitHub issues. Do not paste secrets into them.
     </p>
 
     <h2>Self-hosted account and relay</h2>
@@ -186,7 +207,11 @@
     <h2>Contact and deletion</h2>
     <p>
       Email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a> to ask questions,
-      request removal from the early-access list, or correct your address.
+      request removal from the tester signup list, or correct your address.
+    </p>
+    <p>
+      To delete your ClipSpan account, see <a href="/delete-account">Delete your account</a>.
+      It lists what is deleted, what is kept, and for how long.
     </p>
 
     <h2>Children</h2>
@@ -211,12 +236,13 @@
           width="28"
           height="28"
         />
-        <span>© <span id="year"></span> ClipSpan. Private testing is starting.</span>
+        <span>© <span id="year"></span> ClipSpan. Testing is open.</span>
       </p>
       <div class="footer-links">
         <a href="/">Home</a>
         <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
-        <a href="/#access">Early access</a>
+        <a href="/delete-account">Delete account</a>
+        <a href="/#access">Join testing</a>
       </div>
     </div>
   </footer>
