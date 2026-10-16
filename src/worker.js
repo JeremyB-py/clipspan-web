@@ -332,6 +332,55 @@ async function handleApt(request, env, ctx) {
   });
 }
 
+const MEDIA_FILE = /^\/assets\/[^/]+\.(mp4|webm)$/;
+
+// Returns { start, end } (inclusive), "unsatisfiable", or null to send the whole file.
+function parseByteRange(header, size) {
+  const match = /^bytes=(\d*)-(\d*)$/.exec(header.trim());
+  if (!match || (match[1] === "" && match[2] === "")) {
+    return null;
+  }
+  if (match[1] === "") {
+    const suffix = Number(match[2]);
+    return suffix === 0 ? "unsatisfiable" : { start: Math.max(0, size - suffix), end: size - 1 };
+  }
+  const start = Number(match[1]);
+  const end = match[2] === "" ? size - 1 : Math.min(Number(match[2]), size - 1);
+  return start >= size || start > end ? "unsatisfiable" : { start, end };
+}
+
+// Static assets answer Range requests with the whole file, and Safari will not
+// play a <video> without 206 responses, so video files are sliced here.
+async function handleMedia(request, env) {
+  const upstream = await env.ASSETS.fetch(request);
+  const rangeHeader = request.headers.get("Range");
+  if (!rangeHeader || request.method !== "GET" || upstream.status !== 200) {
+    const response = new Response(upstream.body, upstream);
+    response.headers.set("Accept-Ranges", "bytes");
+    return response;
+  }
+
+  const body = await upstream.arrayBuffer();
+  const size = body.byteLength;
+  const range = parseByteRange(rangeHeader, size);
+  const headers = new Headers(upstream.headers);
+  headers.set("Accept-Ranges", "bytes");
+  headers.delete("Content-Encoding");
+
+  if (range === null) {
+    headers.set("Content-Length", String(size));
+    return new Response(body, { status: 200, headers });
+  }
+  if (range === "unsatisfiable") {
+    headers.set("Content-Range", `bytes */${size}`);
+    headers.delete("Content-Length");
+    return new Response(null, { status: 416, headers });
+  }
+  headers.set("Content-Range", `bytes ${range.start}-${range.end}/${size}`);
+  headers.set("Content-Length", String(range.end - range.start + 1));
+  return new Response(body.slice(range.start, range.end + 1), { status: 206, headers });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -363,6 +412,10 @@ export default {
     // same tree. GitHub Pages cannot host this: clipspan is a private repo.
     if (isAptRequest(url)) {
       return handleApt(request, env, ctx);
+    }
+
+    if (MEDIA_FILE.test(url.pathname) && (request.method === "GET" || request.method === "HEAD")) {
+      return handleMedia(request, env);
     }
 
     return env.ASSETS.fetch(request);
