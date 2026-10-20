@@ -13,7 +13,7 @@
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=7" />
+  <link rel="stylesheet" href="assets/site.css?v=8" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -107,7 +107,7 @@
           </div>
         </section>
 
-        <section class="os" data-os="linux" aria-labelledby="os-linux">
+        <section class="os" data-os="linux" data-always aria-labelledby="os-linux">
           <div class="os-head">
             <span class="os-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg></span>
             <div>
@@ -146,24 +146,39 @@
           </div>
         </section>
 
-        <section class="os" data-os="android" aria-labelledby="os-android">
+        <section class="os" data-os="android" data-always aria-labelledby="os-android">
           <div class="os-head">
             <span class="os-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.2" /><path d="M11 18.5h2" /></svg></span>
             <div>
               <h3 id="os-android">Android</h3>
-              <p class="os-sub">Phones and tablets. ClipSpan Keyboard is included.</p>
+              <p class="os-sub">Phones and tablets, through Google Play's testing program</p>
             </div>
             <span class="os-yours" hidden>Your device</span>
           </div>
-          <p class="play-slot" data-google-play>Coming soon to Google Play.</p>
-          <a class="dl-primary" data-file="android-apk" hidden>
-            <span class="dl-name">Download the APK</span>
-            <span class="dl-meta"></span>
-          </a>
+          <ol class="play-steps">
+            <li>
+              <p>Join the test while signed in to the Google account you signed up with.</p>
+              <a class="dl-primary" href="https://play.google.com/apps/testing/com.clipspan.app">
+                <span class="dl-name">Join the test</span>
+                <span class="dl-meta">play.google.com/apps/testing/com.clipspan.app</span>
+              </a>
+            </li>
+            <li>
+              <p>Then install ClipSpan from Google Play. Updates arrive through Google Play too.</p>
+              <a class="dl" href="https://play.google.com/store/apps/details?id=com.clipspan.app">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+                <span class="dl-text">
+                  <span class="dl-name">Install from Google Play</span>
+                  <span class="dl-meta">play.google.com/store/apps/details?id=com.clipspan.app</span>
+                </span>
+              </a>
+            </li>
+          </ol>
           <p class="os-note">
-            The first time, Android asks you to allow installs from your browser. When ClipSpan
-            reaches Google Play, uninstall this APK before installing from Play: the two are
-            signed differently.
+            If Google Play says you can't join, or you signed up with an address that isn't a
+            Google account, email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+            with the Google account you use on your phone and we'll add it. If you installed a
+            ClipSpan APK before, uninstall it first: the Google Play version is signed differently.
           </p>
         </section>
       </div>
@@ -196,7 +211,6 @@
     </div>
   </footer>
 
-  <script src="assets/google-play.js" defer></script>
   <script>
     document.getElementById("year").textContent = String(new Date().getFullYear());
 
@@ -295,10 +309,10 @@
             .join(" · ");
         }
       }
-      // Linux always has the apt command; other systems need a file in this release.
+      // Linux (apt) and Android (Google Play) always show; other systems need a file here.
       for (const section of osList.querySelectorAll(".os")) {
         const hasFile = Boolean(section.querySelector("[data-file]:not([hidden])"));
-        section.hidden = section.dataset.os !== "linux" && !hasFile;
+        section.hidden = !("always" in section.dataset) && !hasFile;
       }
       for (const more of osList.querySelectorAll(".dl-more")) {
         more.hidden = !more.querySelector("[data-file]:not([hidden])");

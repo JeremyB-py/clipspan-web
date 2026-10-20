@@ -912,6 +912,27 @@ td {
   font-weight: 600;
 }
 
+.play-steps {
+  display: grid;
+  gap: 0.9rem;
+  margin-left: 1.25rem;
+  font-size: 0.92rem;
+}
+
+.play-steps li::marker {
+  color: var(--os-accent);
+  font-weight: 700;
+}
+
+.play-steps .dl-primary {
+  display: inline-grid;
+  margin-top: 0.45rem;
+}
+
+.play-steps .dl {
+  margin-top: 0.45rem;
+}
+
 .tag {
   margin-left: 0.35rem;
   padding: 0.05rem 0.5rem;
