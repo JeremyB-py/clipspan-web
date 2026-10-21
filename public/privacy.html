@@ -35,7 +35,7 @@
 
   <main class="wrap policy">
     <h1>Privacy policy</h1>
-    <p class="meta">Last updated: 15 October 2026 · Applies to clipspan.com and the ClipSpan apps</p>
+    <p class="meta">Last updated: 21 October 2026 · Applies to clipspan.com and the ClipSpan apps</p>
 
     <p>
       ClipSpan is a clipboard history app for Android, Linux, and Windows. On Android,
@@ -119,7 +119,14 @@
     <ul>
       <li>History, pins, hidden items, and Recently removed are stored on the device.</li>
       <li>LAN sync uses a pairing secret you scan or enter. Do not share pairing QR codes or tokens.</li>
-      <li>Automatic sync can include text and multimedia you copy, subject to your size and sensitive-content settings.</li>
+      <li>Automatic sync can include text and multimedia you copy, subject to your size and Sensitive clips settings.</li>
+      <li>
+        Sensitive clips (passwords and other copies an app marks as sensitive) sync to your other
+        devices by default, encrypted on the way like every clip. Each device shows them as dots in
+        History and deletes them after Remove after (5 minutes unless you change it). Until then
+        they are stored in History on each device, which is not encrypted on disk. Settings &gt;
+        Sensitive clips can keep them on one device or not keep them at all.
+      </li>
       <li>
         Diagnostics and bug reports omit clipboard contents, tokens, pairing secrets, and passwords.
         Network details such as a LAN address are included only if you opt in.
