@@ -332,6 +332,143 @@ async function handleApt(request, env, ctx) {
   });
 }
 
+function methodNotAllowed() {
+  return new Response("Method not allowed.\n", {
+    status: 405,
+    headers: {
+      Allow: "GET, HEAD",
+      "Cache-Control": "no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}
+
+// Android App Links. com.clipspan.app has an autoVerify intent filter for
+// https://www.clipspan.com/pair (pairing QR codes from ClipSpan 0.23.1), and Android only
+// lets the app open those links after it reads this statement from www.clipspan.com. The
+// check fails on anything but a 200 with application/json, and Android follows no
+// redirects, so this route runs before auth, apt, and the asset fallthrough on every host.
+// The apex clipspan.com redirects to www in the Cloudflare dashboard, which is why the App
+// Link host is www.
+const ASSET_LINKS_PATH = "/.well-known/assetlinks.json";
+const ASSET_LINKS = [
+  {
+    relation: ["delegate_permission/common.handle_all_urls"],
+    target: {
+      namespace: "android_app",
+      package_name: "com.clipspan.app",
+      // SHA-256 fingerprints of every certificate a release install can be signed with.
+      sha256_cert_fingerprints: [
+        // Google Play app signing key: Google Play re-signs every install it delivers.
+        "D6:EE:3C:09:73:02:EF:A1:98:F4:CB:D9:F9:B8:79:43:46:73:96:1C:7B:24:76:49:0A:67:E6:62:5F:72:0E:3F",
+        // Upload key: signs release builds before Google Play re-signs them, so a release
+        // APK installed outside Google Play verifies too.
+        "A7:AE:6E:E0:74:7F:FC:9F:A3:F1:EF:1C:1E:0B:BD:91:E0:D5:CC:06:49:47:65:2B:6C:45:12:8E:A7:71:29:7B",
+      ],
+    },
+  },
+];
+const ASSET_LINKS_BODY = JSON.stringify(ASSET_LINKS);
+const ASSET_LINKS_LENGTH = String(new TextEncoder().encode(ASSET_LINKS_BODY).byteLength);
+const ASSET_LINKS_MAX_AGE = 300;
+
+function handleAssetLinks(request) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return methodNotAllowed();
+  }
+  return new Response(request.method === "HEAD" ? null : ASSET_LINKS_BODY, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": ASSET_LINKS_LENGTH,
+      "Cache-Control": `public, max-age=${ASSET_LINKS_MAX_AGE}`,
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
+// /pair is where a camera scan of a pairing QR code lands when ClipSpan isn't installed
+// or is older than 0.23.1. The QR code puts the pairing token after the #, which browsers
+// never send here, and public/assets/pair.js turns it into a link older apps can paste.
+// These headers keep that token on the page: no Referer, no caching, only the site's own
+// scripts and styles, no framing, and no-transform so Cloudflare doesn't inject scripts
+// (email obfuscation and similar features skip no-transform responses).
+const PAIR_PAGE = "/pair";
+const PAIR_PAGE_CSP = [
+  "default-src 'none'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self'",
+  "font-src 'self'",
+  "connect-src 'none'",
+  "form-action 'none'",
+  "base-uri 'none'",
+  "frame-ancestors 'none'",
+].join("; ");
+const PAIR_PAGE_HEADERS = {
+  "Content-Security-Policy": PAIR_PAGE_CSP,
+  "Referrer-Policy": "no-referrer",
+  "Cache-Control": "no-store, no-transform",
+  "X-Robots-Tag": "noindex, nofollow",
+  "X-Content-Type-Options": "nosniff",
+};
+
+// The paths the asset server answers with pair.html or a redirect to it (/pair, /pair/,
+// /pair.html) all come through here, so no copy of the page goes out without
+// PAIR_PAGE_HEADERS. Percent-encoding and doubled slashes are undone first in case the asset
+// server undoes them too. Returns "page", "redirect", or null.
+function pairRoute(pathname) {
+  let path = pathname;
+  try {
+    path = decodeURIComponent(pathname);
+  } catch {
+    // Malformed escapes: match the raw path.
+  }
+  path = path.replace(/\/{2,}/g, "/");
+  if (path === PAIR_PAGE || path === `${PAIR_PAGE}/`) {
+    return "page";
+  }
+  if (path === `${PAIR_PAGE}.html`) {
+    return "redirect";
+  }
+  return null;
+}
+
+async function handlePairPage(request, env, route) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return methodNotAllowed();
+  }
+  const url = new URL(request.url);
+  if (route === "redirect") {
+    // The browser keeps the #fragment across the redirect, since Location has none.
+    return new Response(null, {
+      status: 307,
+      headers: {
+        Location: new URL(PAIR_PAGE + url.search, url.origin).href,
+        "Cache-Control": "no-store",
+        "Referrer-Policy": "no-referrer",
+      },
+    });
+  }
+  // Always ask for /pair: with html_handling = "auto-trailing-slash" the asset server
+  // serves pair.html there and answers /pair/ and /pair.html with a redirect.
+  const upstream = await env.ASSETS.fetch(
+    new Request(new URL(PAIR_PAGE, url.origin), {
+      method: request.method,
+      headers: request.headers,
+    }),
+  );
+  const headers = new Headers(upstream.headers);
+  for (const [name, value] of Object.entries(PAIR_PAGE_HEADERS)) {
+    headers.set(name, value);
+  }
+  return new Response(upstream.body, {
+    status: upstream.status,
+    statusText: upstream.statusText,
+    headers,
+  });
+}
+
 const MEDIA_FILE = /^\/assets\/[^/]+\.(mp4|webm)$/;
 
 // Returns { start, end } (inclusive), "unsatisfiable", or null to send the whole file.
@@ -384,6 +521,17 @@ async function handleMedia(request, env) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    // First, on every host: Android's App Link check takes nothing but a plain 200.
+    if (url.pathname === ASSET_LINKS_PATH) {
+      return handleAssetLinks(request);
+    }
+
+    // apt.clipspan.com serves only public/apt, so /pair there stays an apt path.
+    const pair = isAptHost(url.hostname) ? null : pairRoute(url.pathname);
+    if (pair) {
+      return handlePairPage(request, env, pair);
+    }
 
     if (url.pathname.startsWith(UPDATES_PREFIX) && request.method === "GET") {
       const isManifest = url.pathname === `${UPDATES_PREFIX}latest.json`;

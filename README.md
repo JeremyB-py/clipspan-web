@@ -9,7 +9,14 @@ Static site for **clipspan.com**, deployed as a Cloudflare Worker with static as
 - Tester downloads: `public/downloads.html`, gated by per-tester codes in [`src/worker.js`](src/worker.js) (see [Tester codes](#tester-codes))
 - Desktop in-app updater: `GET /updates/latest.json` (latest release manifest, cached 5 minutes) and `GET /updates/v<version>/<file>` (AppImage, NSIS `-setup.exe`, or `.msi` only). Both are public without a tester code, because installed apps cannot sign in, and rate limited per IP (30/min for the manifest, 6/min for files; `[[ratelimits]]` in `wrangler.toml`). Integrity comes from the minisign pubkey compiled into the app, not from this Worker. The APK, the `/downloads` listing, and the APT install script stay gated. The APT repo's package lists and `.deb`s are public, as `install.sh` requires.
 - Tester APT origin: `https://apt.clipspan.com` (this Worker custom domain; `public/apt/` at URL root). `https://www.clipspan.com/apt` is the same tree. ClipSpan `./scripts/publish-apt-repo.sh --push` replaces `public/apt` (do not edit that tree by hand). Attach `apt.clipspan.com` on Worker **clipspan-web** in the Cloudflare dashboard.
+- Pairing QR codes and Android App Links: `GET /.well-known/assetlinks.json` and `/pair` (see [App Links and /pair](#app-links-and-pair)).
 - Setup checklist and Reddit notes: [SETUP.md](SETUP.md)
+
+Run the tests (Node's built-in test runner, no dependencies):
+
+```bash
+npm test
+```
 
 Preview the static pages:
 
@@ -87,6 +94,52 @@ Do these in order. Deploying before codes exist locks every tester out.
 7. Once everyone has their own code: `node scripts/tester-codes.mjs revoke shared`, and
    delete the old `DOWNLOADS_PASSWORD` secret from the Worker.
 
+## App Links and /pair
+
+From ClipSpan 0.23.1 the desktop's pairing QR code holds
+`https://www.clipspan.com/pair#v=1&h=<host>&p=<port>&t=<token>&f=<pin>`. The Android app
+(`com.clipspan.app`) has a verified App Link for `https://www.clipspan.com/pair`, so a camera
+scan opens ClipSpan when it's installed. Everything after `#` stays on the phone: browsers
+never send it to this Worker.
+
+- `GET`/`HEAD /.well-known/assetlinks.json` (`ASSET_LINKS` in `src/worker.js`): the Digital
+  Asset Links statement Android checks before it trusts the App Link. It lists the SHA-256
+  fingerprints of the Google Play app signing key and the upload key. The Worker answers it
+  first, on every host, with a 200, `Content-Type: application/json` and
+  `Cache-Control: public, max-age=300`. There is no auth and no redirect, since Android's check
+  fails on either. Other methods get 405. Add a fingerprint here before shipping a build signed
+  with a new key. The App Link host is `www` because `clipspan.com` redirects to it in the
+  Cloudflare dashboard.
+- `/pair` (`public/pair.html`, `public/assets/pair.js`): where the camera lands without
+  ClipSpan or with an app older than 0.23.1. It tells people to scan again from ClipSpan's
+  **Scan QR code** and links to the Google Play test. When the fragment holds a valid pairing
+  code, it also shows the `https://<host>:<port>/p?t=<token>&f=<pin>` link older apps take under
+  **Can't scan? Enter the pairing link**, then removes the fragment from the address bar. The
+  script makes no network requests. The Worker serves `/pair` and `/pair/` with a strict CSP
+  (only the site's own scripts, styles and images, no connections, no framing),
+  `Referrer-Policy: no-referrer`, `Cache-Control: no-store, no-transform` and
+  `X-Robots-Tag: noindex`, and redirects `/pair.html` to `/pair`, so no copy of the page goes
+  out without those headers. The page has no inline scripts or styles, and repeats the policy in
+  a `<meta>` tag.
+
+Check both after a deploy:
+
+```bash
+curl -sS -o /dev/null -w '%{http_code} %{content_type} %{redirect_url}\n' https://www.clipspan.com/.well-known/assetlinks.json
+# expect "200 application/json " with nothing after it (no redirect)
+curl -sSI https://www.clipspan.com/pair | grep -iE 'content-security-policy|referrer-policy|cache-control|x-robots-tag'
+```
+
+Then open Google's checker, which should list the `com.clipspan.app` statement with both
+fingerprints:
+<https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://www.clipspan.com&relation=delegate_permission/common.handle_all_urls>
+
+Cloudflare dashboard features that inject scripts or challenge visitors must not apply to
+`/.well-known/*` or `/pair`: Zaraz, Web Analytics automatic setup, Rocket Loader, Email Address
+Obfuscation, Bot Fight Mode, and WAF or rate limiting rules that show a challenge. Android's
+verifier is a bot and gives up on a challenge page, and an injected script on `/pair` could read
+the pairing code. If any of them is on for the zone, add a rule that skips these paths.
+
 ## Workers Builds
 
 - Build command: None
@@ -95,5 +148,7 @@ Do these in order. Deploying before codes exist locks every tester out.
 - Root directory: `/`
 
 Do not clear Deploy command. The Worker name in Cloudflare must match `name = "clipspan-web"`.
+`package.json` has no dependencies and only holds `npm test`, so the build's automatic
+dependency install has nothing to do.
 
 Before sharing the domain publicly, complete the checklist in `SETUP.md` (HTTPS, form endpoint, contact inbox, OG image).

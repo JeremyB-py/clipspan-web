@@ -1,0 +1,144 @@
+{
+  "description": "Pairing App Link fragments (after https://www.clipspan.com/pair#, ADR 0031). Android's PairBootstrapParser.parseAppLink and www.clipspan.com's pair.js must agree on every case; clipspan-web keeps a copy in test/fixtures.",
+  "cases": [
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": true,
+      "host": "192.168.1.9",
+      "port": 47265
+    },
+    {
+      "fragment": "v=1&h=desk-7.local&p=8765&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": true,
+      "host": "desk-7.local",
+      "port": 8765
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4&later=field",
+      "valid": true,
+      "host": "192.168.1.9",
+      "port": 47265,
+      "why": "unknown fields are ignored"
+    },
+    {
+      "fragment": "v=2&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "newer version"
+    },
+    {
+      "fragment": "h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "no version"
+    },
+    {
+      "fragment": "v=1&h=127.0.0.1&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "loopback: any app can listen there"
+    },
+    {
+      "fragment": "v=1&h=localhost&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "localhost"
+    },
+    {
+      "fragment": "v=1&h=0.0.0.0&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "0.0.0.0"
+    },
+    {
+      "fragment": "v=1&h=010.0.0.1&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "leading zero (octal)"
+    },
+    {
+      "fragment": "v=1&h=10.0.0.300&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "octet over 255"
+    },
+    {
+      "fragment": "v=1&h=2130706433&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "a bare number is an address"
+    },
+    {
+      "fragment": "v=1&h=pc.0x1f&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "hex last label"
+    },
+    {
+      "fragment": "v=1&h=a..b&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "empty label"
+    },
+    {
+      "fragment": "v=1&h=evil.example%2Fx&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "escaped slash"
+    },
+    {
+      "fragment": "v=1&h=user@192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "user info"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9:443&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "port in host"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=+47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "signed port"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=047265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "leading zero port"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=0&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "port 0"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=70000&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "port over 65535"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=abc&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "short token"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2FX4Z4WYHOM6CNYTMYMZDSJIY4",
+      "valid": false,
+      "why": "the desktop writes the pin in lowercase"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=short",
+      "valid": false,
+      "why": "short pin"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4a",
+      "valid": false,
+      "why": "27-character pin"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4&h=10.0.0.5",
+      "valid": false,
+      "why": "repeated field"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&&p=47265&t=aqlE98Mf&f=2fx4z4wyhom6cnytmymzdsjiy4",
+      "valid": false,
+      "why": "empty part"
+    },
+    {
+      "fragment": "v=1&h=192.168.1.9&p=47265&t=aqlE98Mf",
+      "valid": false,
+      "why": "no pin"
+    }
+  ]
+}
