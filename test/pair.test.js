@@ -76,7 +76,6 @@ test("accepts IPv4 addresses and DNS names", () => {
   for (const host of [
     "10.0.0.1",
     "255.255.255.255",
-    "0.0.0.0",
     "pc",
     "my-pc",
     "jeremy-desktop.local",
@@ -153,13 +152,15 @@ test("tokens are 4 to 128 base64url characters", () => {
   }
 });
 
-test("pins are 16 to 128 lowercase base32 characters", () => {
-  for (const f of ["a".repeat(16), "abcdefghijklmnopqrstuvwxyz234567", "z".repeat(128)]) {
+test("pins are the desktop's 26 lowercase base32 characters", () => {
+  for (const f of [PIN, "a".repeat(26), "abcdefghijklmnopqrstuvwxyz"]) {
     assert.ok(parsePairFragment(fragment({ ...VALID, f })), f);
   }
   for (const f of [
-    "a".repeat(15),
-    "a".repeat(129),
+    "a".repeat(16),
+    "a".repeat(25),
+    "abcdefghijklmnopqrstuvwxyz234567",
+    "a".repeat(128),
     PIN.toUpperCase(),
     `${PIN}0`,
     `${PIN}1`,

@@ -24,16 +24,23 @@ const NUMBER_LABEL = /^(?:\d+|0x[0-9a-f]*)$/i;
 const PORT = /^[1-9]\d{0,4}$/;
 const MAX_PORT = 65535;
 const TOKEN = /^[A-Za-z0-9_-]{4,128}$/;
-const PIN = /^[a-z2-7]{16,128}$/;
+// The desktop's TLS pin as it writes it, the only form ClipSpan accepts.
+const PIN = /^[a-z2-7]{26}$/;
 const FIELDS = new Set(["v", "h", "p", "t", "f"]);
 
-// A LAN IPv4 address or a DNS name. No IPv6, ports, paths, or user info.
+// A LAN IPv4 address or a DNS name. No IPv6, ports, paths, or user info, and no loopback or
+// localhost: any app on the phone can listen there.
 export function validHost(host) {
   if (typeof host !== "string" || host.length === 0 || host.length > MAX_HOST) {
     return false;
   }
+  const lower = host.toLowerCase();
+  if (lower === "localhost" || lower.endsWith(".localhost")) {
+    return false;
+  }
   if (IPV4.test(host)) {
-    return true;
+    const first = Number(host.split(".")[0]);
+    return first !== 127 && first !== 0;
   }
   const labels = host.split(".");
   const last = labels[labels.length - 1];
