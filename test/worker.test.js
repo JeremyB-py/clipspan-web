@@ -58,7 +58,7 @@ function call(url, init = {}, env = fakeEnv().env) {
 for (const host of ["www.clipspan.com", "clipspan.com", "apt.clipspan.com"]) {
   test(`assetlinks.json is a plain 200 JSON statement list on ${host}`, async () => {
     const { env, calls } = fakeEnv();
-    // A browser navigation with no tester cookie must not be sent to sign in.
+    // A browser navigation gets the statement too, never a redirect.
     const response = await call(
       `https://${host}/.well-known/assetlinks.json`,
       { headers: { "Sec-Fetch-Mode": "navigate", Accept: "text/html" } },
@@ -166,9 +166,9 @@ test("pair.html loads only same-origin files, with no inline scripts or styles",
 test("apt.clipspan.com/pair stays in the apt tree", async () => {
   const { env, calls } = fakeEnv();
   const response = await call("https://apt.clipspan.com/pair", {}, env);
-  // Not a public apt path, and downloads aren't configured in this env.
-  assert.equal(response.status, 503);
-  assert.deepEqual(calls, []);
+  assert.equal(await response.text(), "asset /apt/pair");
+  assert.equal(response.headers.get("Content-Security-Policy"), null);
+  assert.deepEqual(calls, [{ method: "GET", host: "apt.clipspan.com", pathname: "/apt/pair" }]);
 });
 
 test("other pages still fall through to static assets unchanged", async () => {
@@ -181,7 +181,7 @@ test("other pages still fall through to static assets unchanged", async () => {
   assert.deepEqual(calls, [{ method: "GET", host: "www.clipspan.com", pathname: "/privacy.html" }]);
 });
 
-test("public apt files are still served from public/apt without a tester code", async () => {
+test("apt files are served from public/apt", async () => {
   const { env, calls } = fakeEnv();
   const response = await call("https://apt.clipspan.com/dists/stable/Release", {}, env);
   assert.equal(response.status, 200);
@@ -191,14 +191,120 @@ test("public apt files are still served from public/apt without a tester code", 
   ]);
 });
 
-test("the releases API still needs a tester code", async () => {
-  const limiter = { limit: async () => ({ success: true }) };
-  const { env } = fakeEnv({
-    DOWNLOADS_SESSION_KEY: "test-key",
-    TESTER_CODES: { get: async () => null },
-    AUTH_LIMITER: limiter,
+test("the apt install script needs no code, and an old tester code is ignored", async () => {
+  for (const headers of [{}, { Authorization: `Basic ${btoa("clipspan:OLD-CODE")}` }]) {
+    const { env, calls } = fakeEnv();
+    const response = await call("https://apt.clipspan.com/install.sh", { headers }, env);
+    assert.equal(response.status, 200);
+    assert.equal(await response.text(), "asset /apt/install.sh");
+    assert.deepEqual(calls, [{ method: "GET", host: "apt.clipspan.com", pathname: "/apt/install.sh" }]);
+  }
+});
+
+const RELEASE = {
+  tag_name: "v0.23.1",
+  name: "ClipSpan 0.23.1",
+  published_at: "2026-10-27T12:00:00Z",
+  body: "Release notes",
+  assets: [
+    { id: 1, name: "ClipSpan_0.23.1_x64-setup.exe", size: 100 },
+    { id: 2, name: "ClipSpan_0.23.1_x64_en-US.msi", size: 200 },
+    { id: 3, name: "clipspan-0.23.1-release.apk", size: 300 },
+    { id: 4, name: "latest.json", size: 10 },
+  ],
+};
+
+// Stands in for GitHub's API and the Workers cache while `run` goes. Passes `run` the
+// GitHub paths requested so far.
+async function withGitHub(run) {
+  const requests = [];
+  const cached = new Map();
+  const saved = { fetch: globalThis.fetch, caches: globalThis.caches };
+  globalThis.fetch = async (input) => {
+    const { pathname } = new URL(input);
+    requests.push(pathname);
+    if (pathname.endsWith("/releases/latest")) {
+      return Response.json(RELEASE);
+    }
+    const asset = /\/releases\/assets\/(\d+)$/.exec(pathname);
+    return asset
+      ? new Response(`file ${asset[1]}`, { headers: { "Content-Type": "application/octet-stream" } })
+      : new Response("Not Found", { status: 404 });
+  };
+  globalThis.caches = {
+    default: {
+      async match(request) {
+        return cached.get(request.url)?.clone();
+      },
+      async put(request, response) {
+        cached.set(request.url, response);
+      },
+    },
+  };
+  try {
+    await run(requests);
+  } finally {
+    globalThis.fetch = saved.fetch;
+    globalThis.caches = saved.caches;
+  }
+}
+
+function githubEnv({ allowDownload = true } = {}) {
+  return fakeEnv({
+    GITHUB_TOKEN: "test-token",
+    DOWNLOAD_LIMITER: { limit: async () => ({ success: allowDownload }) },
+  }).env;
+}
+
+test("the releases API is public, lists desktop files only, and is cached", async () => {
+  await withGitHub(async (requests) => {
+    const env = githubEnv();
+    const response = await call("https://www.clipspan.com/api/releases", {}, env);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("Cache-Control"), "public, max-age=60");
+    const body = await response.json();
+    assert.equal(body.tag, "v0.23.1");
+    assert.deepEqual(
+      body.assets.map((asset) => [asset.id, asset.platform]),
+      [
+        [1, "windows-exe"],
+        [2, "windows-msi"],
+      ],
+    );
+
+    // Another query string still uses the one cache entry.
+    const again = await call("https://www.clipspan.com/api/releases?fresh=1", {}, env);
+    assert.deepEqual(await again.json(), body);
+    assert.deepEqual(requests, ["/repos/JeremyB-py/clipspan/releases/latest"]);
   });
-  const response = await call("https://www.clipspan.com/api/releases", {}, env);
-  assert.equal(response.status, 401);
-  assert.deepEqual(await response.json(), { error: "Enter your tester code." });
+});
+
+test("a listed file downloads without a code", async () => {
+  await withGitHub(async () => {
+    const response = await call("https://www.clipspan.com/api/download?id=2", {}, githubEnv());
+    assert.equal(response.status, 200);
+    assert.equal(
+      response.headers.get("Content-Disposition"),
+      'attachment; filename="ClipSpan_0.23.1_x64_en-US.msi"',
+    );
+    assert.equal(await response.text(), "file 2");
+  });
+});
+
+test("an APK in the release is not served, so Android stays on Google Play's test", async () => {
+  await withGitHub(async (requests) => {
+    const response = await call("https://www.clipspan.com/api/download?id=3", {}, githubEnv());
+    assert.equal(response.status, 404);
+    assert.deepEqual(requests, ["/repos/JeremyB-py/clipspan/releases/latest"]);
+  });
+});
+
+test("downloads are rate limited before GitHub is asked", async () => {
+  await withGitHub(async (requests) => {
+    const env = githubEnv({ allowDownload: false });
+    const response = await call("https://www.clipspan.com/api/download?id=1", {}, env);
+    assert.equal(response.status, 429);
+    assert.equal(response.headers.get("Retry-After"), "60");
+    assert.deepEqual(requests, []);
+  });
 });

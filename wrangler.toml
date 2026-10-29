@@ -13,18 +13,10 @@ binding = "ASSETS"
 run_worker_first = true
 
 [secrets]
-required = ["DOWNLOADS_SESSION_KEY", "GITHUB_TOKEN"]
+required = ["GITHUB_TOKEN"]
 
-# Per-tester download codes, managed with scripts/tester-codes.mjs. Keys are
-# SHA-256 hashes of the codes, never the codes. Create the namespace with
-# `npx wrangler kv namespace create clipspan-web-tester-codes` and paste its id.
-[[kv_namespaces]]
-binding = "TESTER_CODES"
-id = "b985d0b0f4284a75974eda82b9cd480c"
-
-# Per-IP limits on the public /updates/ routes and on tester code attempts
-# (see src/worker.js). Counters are per Cloudflare location; period must be
-# 10 or 60 seconds. namespace_id is any integer unique within the Cloudflare account.
+# Per-IP limits on the /updates/ routes and /api/download (see src/worker.js).
+# Counters are per Cloudflare location; period must be 10 or 60 seconds. namespace_id is any integer unique within the Cloudflare account.
 [[ratelimits]]
 name = "UPDATES_MANIFEST_LIMITER"
 namespace_id = "1001"
@@ -36,6 +28,6 @@ namespace_id = "1002"
 simple = { limit = 6, period = 60 }
 
 [[ratelimits]]
-name = "AUTH_LIMITER"
-namespace_id = "1003"
-simple = { limit = 10, period = 60 }
+name = "DOWNLOAD_LIMITER"
+namespace_id = "1004"
+simple = { limit = 6, period = 60 }
