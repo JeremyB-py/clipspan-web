@@ -31,7 +31,7 @@
     content="Clipboard history and sync for Android, Linux, and Windows. Local-first and end-to-end encrypted. Testing is open."
   />
   <meta name="twitter:image" content="https://clipspan.com/assets/og-image.png?v=5" />
-  <link rel="stylesheet" href="assets/site.css?v=8" />
+  <link rel="stylesheet" href="assets/site.css?v=10" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -68,7 +68,8 @@
           <p class="tagline">Copy here. Paste anywhere.</p>
           <p class="lede">
             Clipboard history and sync for Android, Linux, and Windows.
-            Testing is open: sign up and we'll email you a tester code.
+            Testing is open: <a href="/downloads">download for Linux or Windows</a>,
+            or sign up to test on Android.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#access">Sign up to test</a>
@@ -309,7 +310,8 @@
             <p class="section-label">Testing</p>
             <h2 id="access-title">Testing is open</h2>
             <p class="section-intro">
-              Sign up and we'll email you a tester code for the downloads page, with builds for Android, Linux, and Windows.
+              Linux and Windows builds are on the <a href="/downloads">downloads page</a>, no sign-up needed.
+              To test on Android, sign up with the email of the Google account on your phone and we'll add you to the Google Play test.
               Signing up doesn't create a ClipSpan account.
             </p>
           </div>
@@ -368,7 +370,7 @@
               <legend class="section-label" style="margin-bottom: 0.35rem">Testing</legend>
               <label class="check">
                 <input type="checkbox" name="willing_to_test" value="yes" />
-                <span>Send me a tester code now (leave unchecked for launch news only)</span>
+                <span>I want to test now (leave unchecked for launch news only)</span>
               </label>
               <label class="check">
                 <input type="checkbox" name="privacy_ack" value="yes" required />
@@ -496,11 +498,11 @@
           throw new Error(detail?.error || `Request failed (${response.status})`);
         }
 
-        const wantsCode = form.elements.namedItem("willing_to_test").checked;
+        const wantsToTest = form.elements.namedItem("willing_to_test").checked;
         form.reset();
         status.dataset.state = "ok";
-        status.textContent = wantsCode
-          ? "Thanks. Watch your inbox for your tester code."
+        status.textContent = wantsToTest
+          ? "Thanks. We'll email you once you're in the Android test. Linux and Windows builds are on the downloads page now."
           : "Thanks. We'll email you launch news.";
       } catch (error) {
         console.error("Early access signup failed:", error);

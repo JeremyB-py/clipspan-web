@@ -763,35 +763,16 @@ td {
   max-width: 46rem;
 }
 
-.gate,
 .catalog {
-  display: none;
   max-width: 46rem;
-}
-
-.catalog {
   margin-top: 2rem;
-}
-
-.gate {
-  background: linear-gradient(160deg, #102a4a 0%, #0b1f3a 55%, #061525 100%);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: clamp(1.35rem, 3.5vw, 2rem);
-  box-shadow: var(--shadow);
-}
-
-.gate .lede {
-  margin-bottom: 1rem;
 }
 
 .empty {
   display: none;
 }
 
-.empty.visible,
-.gate.visible,
-.catalog.visible {
+.empty.visible {
   display: block;
 }
 
@@ -802,6 +783,14 @@ td {
 .release-meta p {
   color: var(--text-soft);
   font-size: 0.95rem;
+}
+
+.release-meta .form-status[data-state="err"] {
+  color: var(--danger-text);
+}
+
+.release-meta .form-status:empty {
+  display: none;
 }
 
 /* Downloads: one section per system, each with its own accent color. */
@@ -892,6 +881,41 @@ td {
 .os-note,
 .os-option p {
   font-size: 0.92rem;
+}
+
+/* Windows: antivirus and SmartScreen false positives while the app is new. */
+.os-warn {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--warn-bg);
+  border: 1px solid rgba(253, 230, 138, 0.25);
+  border-radius: var(--radius);
+  color: var(--warn-text);
+  font-size: 0.92rem;
+}
+
+.os-warn ul {
+  display: grid;
+  gap: 0.4rem;
+  margin-left: 1.1rem;
+}
+
+.os-warn strong,
+.os-warn a {
+  color: #fef3c7;
+}
+
+.os-warn p.os-warn-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fef3c7;
+}
+
+/* A secondary file, like the MSI, kept small so it doesn't read as the main download. */
+.dl-alt {
+  color: var(--text-soft);
+  font-size: 0.85rem;
 }
 
 .os-option {

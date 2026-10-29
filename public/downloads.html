@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tester downloads - ClipSpan</title>
+  <title>Downloads - ClipSpan</title>
   <meta
     name="description"
-    content="Private ClipSpan tester builds for Android, Linux, and Windows."
+    content="ClipSpan test builds for Android, Linux, and Windows."
   />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="assets/favicon.ico?v=4" sizes="any" />
   <link rel="icon" href="assets/favicon-32.png?v=4" type="image/png" sizes="32x32" />
   <link rel="icon" href="assets/favicon-64.png?v=4" type="image/png" sizes="64x64" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=4" />
-  <link rel="stylesheet" href="assets/site.css?v=8" />
+  <link rel="stylesheet" href="assets/site.css?v=10" />
 </head>
 <body>
   <header class="wrap site-header">
@@ -34,48 +34,28 @@
   </header>
 
   <main class="wrap page">
-    <p class="section-label">Testers</p>
+    <p class="section-label">Testing</p>
     <h1>Downloads</h1>
     <p class="lede">
-      Private builds from the latest ClipSpan release. This is not a store listing.
+      Test builds from the latest ClipSpan release. This is not a store listing.
     </p>
     <p class="banner">
-      These installers are for invited testers and can change without notice.
+      These are test builds and can change without notice. ClipSpan is new, so your browser
+      or antivirus may warn about the download or block it by mistake. The Windows section
+      below explains what to do.
     </p>
-    <section class="gate visible" id="gate" aria-labelledby="gate-title">
-      <p class="section-label">Access</p>
-      <h2 id="gate-title">Tester code</h2>
-      <p class="lede">
-        Enter the tester code you were given. It is yours alone, so please don't share it.
-      </p>
-      <form id="gate-form">
-        <label>
-          Code
-          <input
-            class="field"
-            type="password"
-            name="code"
-            required
-            autocomplete="current-password"
-            autocapitalize="characters"
-            spellcheck="false"
-          />
-        </label>
-        <button class="btn btn-primary" type="submit">Unlock downloads</button>
-        <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
-      </form>
-    </section>
 
     <section class="catalog" id="catalog" aria-labelledby="catalog-title">
       <p class="section-label">Latest release</p>
       <div class="release-meta">
         <h2 id="catalog-title">Loading…</h2>
         <p id="catalog-date"></p>
+        <p class="form-status" id="catalog-status" data-state="err" role="status" aria-live="polite"></p>
       </div>
       <p class="os-detected" id="os-detected" hidden></p>
-      <p class="empty" id="empty">This release does not have tester installers yet.</p>
+      <p class="empty" id="empty">This release doesn't have installers yet.</p>
 
-      <div class="os-list" id="os-list">
+      <div class="os-list" id="os-list" hidden>
         <section class="os" data-os="windows" aria-labelledby="os-windows">
           <div class="os-head">
             <span class="os-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg></span>
@@ -89,22 +69,43 @@
             <span class="dl-name">Download the installer</span>
             <span class="dl-meta"></span>
           </a>
-          <p class="os-note">
-            The installer is code-signed, and Windows shows the publisher as Jeremy Brown.
-            SmartScreen can still warn while the signature builds reputation: choose
-            <strong>More info</strong>, then <strong>Run anyway</strong>. ClipSpan updates itself
-            after that.
-          </p>
-          <div class="dl-more">
-            <a class="dl" data-file="windows-msi" hidden>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
-              <span class="dl-text">
-                <span class="dl-name">MSI package</span>
-                <span class="dl-why">For managed or scripted installs.</span>
-                <span class="dl-meta"></span>
-              </span>
-            </a>
+          <div class="os-warn">
+            <p class="os-warn-title">Your browser or antivirus may block ClipSpan by mistake</p>
+            <p>
+              ClipSpan is new, and security software is wary of files few people have downloaded
+              yet. It may warn about the installer or remove it even though nothing is wrong with
+              it. These warnings should stop as more people install ClipSpan.
+            </p>
+            <ul>
+              <li>
+                <strong>Your browser says the file isn't commonly downloaded:</strong> choose
+                <strong>Keep</strong>. In Edge, open the download's <strong>…</strong> menu,
+                choose <strong>Keep</strong>, then <strong>Show more</strong> and
+                <strong>Keep anyway</strong>.
+              </li>
+              <li>
+                <strong>Windows protected your PC:</strong> choose <strong>More info</strong>,
+                then <strong>Run anyway</strong>.
+              </li>
+              <li>
+                <strong>The file disappeared or was quarantined:</strong> restore it. In Windows
+                Security, open <strong>Virus &amp; threat protection</strong>, then
+                <strong>Protection history</strong>, select the ClipSpan entry, and choose
+                <strong>Actions</strong>, then <strong>Restore</strong>. Other antivirus apps
+                have a similar quarantine list.
+              </li>
+            </ul>
+            <p>
+              The installer is code-signed, and Windows shows the publisher as Jeremy Brown. If it
+              shows anyone else, don't run it. If your antivirus flags ClipSpan, tell us which one
+              at <a href="mailto:contact@clipspan.com">contact@clipspan.com</a> so we can report
+              the mistake. After the first install, ClipSpan updates itself.
+            </p>
           </div>
+          <p class="dl-alt">
+            For managed or scripted installs, there's also an
+            <a data-file="windows-msi" hidden>MSI package</a>.
+          </p>
         </section>
 
         <section class="os" data-os="linux" data-always aria-labelledby="os-linux">
@@ -122,9 +123,8 @@
             </p>
             <p>
               Adds the ClipSpan repository, so updates arrive with your other system updates.
-              Put your tester code in place of <code>YOUR_CODE</code>.
             </p>
-            <pre class="cmd">curl -fsSL -u "clipspan:YOUR_CODE" https://apt.clipspan.com/install.sh | sudo bash</pre>
+            <pre class="cmd">curl -fsSL https://apt.clipspan.com/install.sh | sudo bash</pre>
           </div>
           <div class="dl-more">
             <a class="dl" data-file="linux-appimage" hidden>
@@ -157,7 +157,14 @@
           </div>
           <ol class="play-steps">
             <li>
-              <p>Join the test while signed in to the Google account you signed up with.</p>
+              <p>
+                <a href="/#access">Sign up to test</a> with the email address of the Google account
+                on your phone. Google Play's test is invite-only, so we add that account to it and
+                email you when it's done.
+              </p>
+            </li>
+            <li>
+              <p>Join the test while signed in to that Google account.</p>
               <a class="dl-primary" href="https://play.google.com/apps/testing/com.clipspan.app">
                 <span class="dl-name">Join the test</span>
                 <span class="dl-meta">play.google.com/apps/testing/com.clipspan.app</span>
@@ -175,8 +182,8 @@
             </li>
           </ol>
           <p class="os-note">
-            If Google Play says you can't join, or you signed up with an address that isn't a
-            Google account, email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
+            If Google Play says you can't join, we may not have added you yet, or you signed up
+            with an address that isn't a Google account. Email <a href="mailto:contact@clipspan.com">contact@clipspan.com</a>
             with the Google account you use on your phone and we'll add it. If you installed a
             ClipSpan APK before, uninstall it first: the Google Play version is signed differently.
           </p>
@@ -214,10 +221,6 @@
   <script>
     document.getElementById("year").textContent = String(new Date().getFullYear());
 
-    const gate = document.getElementById("gate");
-    const catalog = document.getElementById("catalog");
-    const form = document.getElementById("gate-form");
-    const status = document.getElementById("gate-status");
     const osList = document.getElementById("os-list");
     const osDetected = document.getElementById("os-detected");
     const empty = document.getElementById("empty");
@@ -225,6 +228,7 @@
     const notesWrap = document.getElementById("notes-wrap");
     const catalogTitle = document.getElementById("catalog-title");
     const catalogDate = document.getElementById("catalog-date");
+    const catalogStatus = document.getElementById("catalog-status");
 
     // The visitor's system, so its downloads can go first. Android user agents also
     // say Linux, and Chromebooks say X11, so those are checked before Linux.
@@ -274,19 +278,28 @@
       });
     }
 
-    function setGateMessage(state, text) {
-      status.dataset.state = state;
-      status.textContent = text;
-    }
+    // Linux (apt) and Android (Google Play) always show, even when the release didn't load;
+    // other systems need a file here. The visitor's system goes first.
+    function showSections() {
+      for (const section of osList.querySelectorAll(".os")) {
+        const hasFile = Boolean(section.querySelector("[data-file]:not([hidden])"));
+        section.hidden = !("always" in section.dataset) && !hasFile;
+      }
+      for (const more of osList.querySelectorAll(".dl-more, .dl-alt")) {
+        more.hidden = !more.querySelector("[data-file]:not([hidden])");
+      }
 
-    function showGate() {
-      gate.classList.add("visible");
-      catalog.classList.remove("visible");
-    }
-
-    function showCatalog() {
-      gate.classList.remove("visible");
-      catalog.classList.add("visible");
+      const os = detectOs();
+      const yours = os && osList.querySelector(`.os[data-os="${os}"]:not([hidden])`);
+      if (yours) {
+        osList.prepend(yours);
+        yours.classList.add("is-yours");
+        yours.querySelector(".os-yours").hidden = false;
+      }
+      osDetected.hidden = os !== "apple";
+      osDetected.textContent =
+        "ClipSpan isn't available for Mac, iPhone, or iPad yet. These downloads are for Android, Linux, and Windows.";
+      osList.hidden = false;
     }
 
     function renderRelease(release) {
@@ -304,77 +317,32 @@
         link.hidden = !asset;
         if (asset) {
           link.href = `/api/download?id=${encodeURIComponent(asset.id)}`;
-          link.querySelector(".dl-meta").textContent = [asset.name, formatSize(asset.size)]
-            .filter(Boolean)
-            .join(" · ");
+          // The small MSI link has no file details.
+          const meta = link.querySelector(".dl-meta");
+          if (meta) {
+            meta.textContent = [asset.name, formatSize(asset.size)].filter(Boolean).join(" · ");
+          }
         }
       }
-      // Linux (apt) and Android (Google Play) always show; other systems need a file here.
-      for (const section of osList.querySelectorAll(".os")) {
-        const hasFile = Boolean(section.querySelector("[data-file]:not([hidden])"));
-        section.hidden = !("always" in section.dataset) && !hasFile;
-      }
-      for (const more of osList.querySelectorAll(".dl-more")) {
-        more.hidden = !more.querySelector("[data-file]:not([hidden])");
-      }
-
-      const os = detectOs();
-      const yours = os && osList.querySelector(`.os[data-os="${os}"]:not([hidden])`);
-      if (yours) {
-        osList.prepend(yours);
-        yours.classList.add("is-yours");
-        yours.querySelector(".os-yours").hidden = false;
-      }
-      osDetected.hidden = os !== "apple";
-      osDetected.textContent =
-        "ClipSpan isn't available for Mac, iPhone, or iPad yet. These downloads are for Android, Linux, and Windows.";
+      showSections();
 
       notes.textContent = release.notes || "";
       notesWrap.hidden = !release.notes;
     }
 
     async function loadReleases() {
-      const response = await fetch("/api/releases", { credentials: "same-origin" });
-      if (response.status === 401) {
-        showGate();
-        return false;
-      }
+      const response = await fetch("/api/releases");
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
         throw new Error(payload.error || "Could not load releases.");
       }
       renderRelease(await response.json());
-      showCatalog();
-      return true;
     }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const code = new FormData(form).get("code");
-      setGateMessage("", "Checking…");
-      try {
-        const response = await fetch("/api/auth", {
-          method: "POST",
-          credentials: "same-origin",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ code }),
-        });
-        const payload = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          setGateMessage("err", payload.error || "That code is not correct.");
-          return;
-        }
-        form.reset();
-        setGateMessage("ok", "Unlocked.");
-        await loadReleases();
-      } catch {
-        setGateMessage("err", "Something went wrong. Try again.");
-      }
-    });
-
     loadReleases().catch((error) => {
-      showGate();
-      setGateMessage("err", error.message || "Could not load releases.");
+      catalogTitle.textContent = "The latest release didn't load";
+      catalogStatus.textContent = `${error.message || "Could not load releases."} Reload to try again.`;
+      showSections();
     });
   </script>
 </body>

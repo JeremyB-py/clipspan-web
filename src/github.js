@@ -1,6 +1,8 @@
 const DEFAULT_REPO = "JeremyB-py/clipspan";
 
-const SKIP_EXT = /\.(aab|sig)$/i;
+// APKs are skipped too: Android testers install through Google Play's test, which is
+// the only part of testing that needs an invite.
+const SKIP_EXT = /\.(aab|apk|sig)$/i;
 const SKIP_NAME = /privacy\.md$|latest\.json$|unsigned|debug|clipspan-daemon/i;
 
 export function repoName(env) {
@@ -11,9 +13,6 @@ export function repoName(env) {
 export function classifyAsset(name) {
   if (SKIP_EXT.test(name) || SKIP_NAME.test(name)) {
     return null;
-  }
-  if (/\.apk$/i.test(name)) {
-    return { platform: "android-apk", label: "Android APK" };
   }
   if (/\.AppImage$/i.test(name)) {
     return { platform: "linux-appimage", label: "Linux AppImage" };
