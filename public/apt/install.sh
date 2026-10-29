@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Install ClipSpan on Debian/Ubuntu (amd64).
-# Testers (apt.clipspan.com, not www.clipspan.com/apt or the apex host):
-#   curl -fsSL -u "clipspan:PASSWORD" https://apt.clipspan.com/install.sh | sudo bash
+# Install ClipSpan on Debian/Ubuntu (amd64). Use apt.clipspan.com, not
+# www.clipspan.com/apt or the apex host:
+#   curl -fsSL https://apt.clipspan.com/install.sh | sudo bash
 # Adds the ClipSpan APT repo. dists/, pool/, and the signing key must be
 # publicly readable. This script does not download from GitHub Releases
 # (the repo is private).
